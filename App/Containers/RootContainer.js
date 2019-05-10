@@ -7,6 +7,7 @@ import ReduxPersist from '../Config/ReduxPersist'
 
 // Styles
 import styles from './Styles/RootContainerStyles'
+import PushNotification from './PushNotification'
 
 class RootContainer extends Component {
   componentDidMount () {
@@ -21,6 +22,7 @@ class RootContainer extends Component {
       <View style={styles.applicationView}>
         <StatusBar barStyle='light-content' />
         <ReduxNavigation />
+        <PushNotification />
       </View>
     )
   }

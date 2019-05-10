@@ -3,6 +3,14 @@ package com.toiletmobile;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
+import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
+import com.airbnb.android.react.maps.MapsPackage;
+import com.imagepicker.ImagePickerPackage;
+import com.facebook.reactnative.androidsdk.FBSDKPackage;
+import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
+import com.kishanjvaghela.cardview.RNCardViewPackage;
+import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -12,10 +20,12 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 
+import android.support.multidex.MultiDexApplication;
+
 import java.util.Arrays;
 import java.util.List;
 
-public class MainApplication extends Application implements ReactApplication {
+public class MainApplication extends MultiDexApplication implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override
@@ -27,6 +37,14 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactNativeYouTube(),
+            new ReactNativeOneSignalPackage(),
+            new MapsPackage(),
+            new ImagePickerPackage(),
+            new FBSDKPackage(),
+            new ReactNativeConfigPackage(),
+            new RNCardViewPackage(),
+            new AsyncStoragePackage(),
             new RNDeviceInfo(),
             new RNI18nPackage(),
             new VectorIconsPackage(),

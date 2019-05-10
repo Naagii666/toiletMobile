@@ -2,12 +2,13 @@
 const images = {
   logo: require('../Images/ir.png'),
   clearLogo: require('../Images/top_logo.png'),
-  launch: require('../Images/launch-icon.png'),
+  launch: require('../Images/toilet.jpg'),
   ready: require('../Images/your-app.png'),
   ignite: require('../Images/ignite_logo.png'),
   igniteClear: require('../Images/ignite-logo-transparent.png'),
   tileBg: require('../Images/tile_bg.png'),
   background: require('../Images/BG.png'),
+  // background: require('../Images/Face-Jorlong.png'),
   buttonBackground: require('../Images/button-bg.png'),
   api: require('../Images/Icons/icon-api-testing.png'),
   components: require('../Images/Icons/icon-components.png'),
@@ -19,7 +20,14 @@ const images = {
   chevronRight: require('../Images/Icons/chevron-right.png'),
   hamburger: require('../Images/Icons/hamburger.png'),
   backButton: require('../Images/Icons/back-button.png'),
-  closeButton: require('../Images/Icons/close-button.png')
+  closeButton: require('../Images/Icons/close-button.png'),
+  fingerPrint: require('../TLogin/Styles/image/finger_print.png'),
+  comment: require('../TLogin/Styles/image/comment.png'),
+  information: require('../TLogin/Styles/image/information.png'),
+  maps: require('../TLogin/Styles/image/maps.png'),
+  transaction: require('../TLogin/Styles/image/transaction.png'),
+  help: require('../TLogin/Styles/image/help.png'),
+  fashion: require('../TLogin/Styles/image/fashion.png'),
 }
 
 export default images

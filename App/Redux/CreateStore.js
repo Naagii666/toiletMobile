@@ -39,11 +39,11 @@ export default (rootReducer, rootSaga) => {
 
   // configure persistStore and check reducer version number
   if (ReduxPersist.active) {
-    Rehydration.updateReducers(store)
+   // Rehydration.updateReducers(store)
   }
 
   // kick off root saga
-  let sagasManager = sagaMiddleware(rootSaga)
+  let sagasManager = sagaMiddleware.run(rootSaga)
 
   return {
     store,

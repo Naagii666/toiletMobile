@@ -4,11 +4,20 @@ import configureStore from './CreateStore'
 import rootSaga from '../Sagas/'
 import ReduxPersist from '../Config/ReduxPersist'
 
+import CommentReducer from '../TLogin/comment/CommentReducer'
+import NewsReducer from '../TLogin/news/NewsReducer'
+import ProductsReducer from '../TLogin/product/ProductsReducer'
+import NegotationReducer from '../TLogin/negotation/NegotationReducer'
+
 /* ------------- Assemble The Reducers ------------- */
 export const reducers = combineReducers({
   nav: require('./NavigationRedux').reducer,
   github: require('./GithubRedux').reducer,
-  search: require('./SearchRedux').reducer
+  search: require('./SearchRedux').reducer,
+  comment: CommentReducer,
+  news: NewsReducer,
+  products: ProductsReducer,
+  negotation: NegotationReducer,
 })
 
 export default () => {
@@ -29,7 +38,7 @@ export default () => {
       const newYieldedSagas = require('../Sagas').default
       sagasManager.cancel()
       sagasManager.done.then(() => {
-        sagasManager = sagaMiddleware(newYieldedSagas)
+        sagasManager = sagaMiddleware.run(newYieldedSagas)
       })
     })
   }

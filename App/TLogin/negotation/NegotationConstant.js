@@ -1,0 +1,17 @@
+export const GET_MY_COMMENTS = 'negotation/get_my_comments'
+export const GET_MY_COMMENTS_FAILED = 'negotation/GET_MY_COMMENTS_FAILED'
+export const GET_MY_COMMENTS_SUCCESS = 'negotation/GET_MY_COMMENTS_SUCCESS'
+
+export const GET_FACEBOOK_COMMENTS = 'negotation/GET_FACEBOOK_COMMENTS'
+export const GET_FACEBOOK_COMMENTS_FAILED = 'negotation/GET_FACEBOOK_COMMENTS_FAILED'
+export const GET_FACEBOOK_COMMENTS_SUCCESS = 'negotation/GET_FACEBOOK_COMMENTS_SUCCESS'
+
+export const ON_ADD_NEGOTATION = 'ON_ADD_NEGOTATION'
+export const ON_ADD_NEGOTATION_FAILED = 'ON_ADD_NEGOTATION_FAILED'
+export const ON_ADD_NEGOTATION_SUCCESS = 'ON_ADD_NEGOTATION_SUCCESS'
+
+
+// export const GET_MY_PRODUCTS = 'negotation/get_my_products'
+// export const GET_MY_PRODUCTS_FAILED = 'negotation/GET_MY_PRODUCTS_FAILED'
+// export const GET_MY_PRODUCTS_SUCCESS = 'negotation/GET_MY_PRODUCTS_SUCCESS'
+
