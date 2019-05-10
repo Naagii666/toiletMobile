@@ -1,3 +1,13 @@
+buildscript {   
+    repositories {  
+        maven { url 'https://plugins.gradle.org/m2/'}   
+    }   
+    dependencies {  
+        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.12.1, 0.99.99]'   
+    }   
+}
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
+apply plugin: 'com.google.gms.google-services'
 apply plugin: "com.android.application"
 
 import com.android.build.OutputFile
@@ -107,6 +117,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     splits {
         abi {
@@ -140,7 +151,9 @@ android {
 dependencies {
     implementation project(':react-native-youtube')
     implementation project(':react-native-onesignal')
-    implementation project(':react-native-maps')
+    // compile 'com.google.firebase:firebase-messaging:17.1.0'
+    compile 'com.google.android.gms:play-services:+' 
+    // implementation project(':react-native-maps')
     implementation project(':react-native-image-picker')
     implementation project(':react-native-fbsdk')
     implementation project(':react-native-config')
@@ -150,6 +163,7 @@ dependencies {
     implementation project(':react-native-i18n')
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-gesture-handler')
+    compile 'com.android.support:multidex:1.0.1'
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.facebook.react:react-native:+"  // From node_modules
@@ -161,3 +175,6 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
+
+com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true 
+

@@ -5,9 +5,9 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
 import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
-import com.airbnb.android.react.maps.MapsPackage;
+// import com.airbnb.android.react.maps.MapsPackage;
 import com.imagepicker.ImagePickerPackage;
-import com.facebook.reactnative.androidsdk.FBSDKPackage;
+// import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
 import com.kishanjvaghela.cardview.RNCardViewPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
@@ -39,9 +39,9 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
           new MainReactPackage(),
             new ReactNativeYouTube(),
             new ReactNativeOneSignalPackage(),
-            new MapsPackage(),
+            // new MapsPackage(),
             new ImagePickerPackage(),
-            new FBSDKPackage(),
+            // new FBSDKPackage(),
             new ReactNativeConfigPackage(),
             new RNCardViewPackage(),
             new AsyncStoragePackage(),
