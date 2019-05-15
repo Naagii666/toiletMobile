@@ -3,11 +3,12 @@ import {bindActionCreators} from 'redux'
 import CardView from 'react-native-cardview';
 
 import React from 'react'
-import { View, Image, FlatList, RefreshControl, TouchableHighlight, StatusBar } from 'react-native'
+import { View, Image, FlatList,Dimensions, RefreshControl, TouchableHighlight, StatusBar } from 'react-native'
 import moment from 'moment'
 import { Row, H2, H3, H4, Wrapper } from '../../Components'
 import { getMyComments } from './ProductsActions'
-
+const { width } = Dimensions.get('window')
+const cardWidth = (width / 2) - 40
 class ProductsView extends React.Component {
 	componentDidMount() {
 	  this.props.getMyComments()
@@ -27,10 +28,11 @@ class ProductsView extends React.Component {
     const { navigate } = this.props.navigation
     return (
       <CardView
-        style={{ flex: 1, margin:10, padding: 10,}}
+        style={{ flex: 1}}
         cardElevation={7}
         cardMaxElevation={7}
         cornerRadius={10}
+        margin={5}
       >
         <StatusBar
           backgroundColor="#f9ac19"
@@ -45,11 +47,12 @@ class ProductsView extends React.Component {
             url: products_image,
           }) }
           style={{flex:1/3,aspectRatio:1}}>
-          <View style={{paddingBottom:1,justifyContent:'center',alignItems:'center'}}>
+          <View style={{paddingBottom:1,justifyContent:'center',alignItems:'center',padding:5}}>
             <H4 adjustFontSizeToFit numberOfLines={1}>{products_name}</H4>
             <Image
-              style={{width: 100, height: 100}}
-              source={{ uri: 'http://124.158.124.60:8080/toilet/'+products_image+'' }} />
+                style={{  width: cardWidth, height: cardWidth }}
+                source={{ uri: 'http://124.158.124.60:8080/toilet/'+products_image+'' }} 
+              />
           </View>
         </TouchableHighlight>
       </CardView>
@@ -62,16 +65,17 @@ class ProductsView extends React.Component {
 
 		return (
 
-			<Wrapper padding={10}>
+			<Wrapper style={{ width: cardWidth, height: cardWidth, borderRadius: 10, overflow: 'hidden' }}>
 				<FlatList
 					contentContainerStyle={{
 						backgroundColor: '#fff',
 					}}
-					numColumns={3}
+					numColumns={2}
 					data={comments}
 					//data={[]}
           renderItem={this.CommentItem.bind(this)}
-					removeClippedSubviews={false}
+          removeClippedSubviews={false}
+          keyExtractor={CommentItem => CommentItem.products_name}
 					// ItemSeparatorComponent={Separator}
           ListEmptyComponent={this._renderEmpty}
           refreshControl={

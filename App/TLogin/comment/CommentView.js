@@ -11,7 +11,8 @@ const CommentItem = ({ item, index }) => {
 	let { comment, Date } = item
 
 	return (
-		<View style={{ paddingHorizontal: 20, backgroundColor:"#DCDCDC",borderRadius:10,paddingTop:8}}>
+		<View style={{ paddingHorizontal: 20,paddingVertical:8, backgroundColor:"#DCDCDC",borderRadius:10}}>
+			
 			<Row justify='between'>
 			<Icon name='comments' size={20} color='#f9ac19' />
 				<H4>
@@ -24,7 +25,7 @@ const CommentItem = ({ item, index }) => {
 			</Row>
 			<View style={{ paddingTop: 10, }}>
 				<H3>
-					aaa{commend}
+					{comment}
 				</H3>
 			</View>
 		</View>
