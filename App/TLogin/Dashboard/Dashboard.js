@@ -116,7 +116,7 @@ class Dashboard extends Component {
           </View>
           <View style={{flex: 1 ,justifyContent: 'center'}}>
             {/* <Text h2>{ this.state.user_name }</Text> */}
-            <Text style={{ fontSize: 21, color: '#fff' }}> Менежер </Text>
+            <Text style={{ fontSize: 17, color: '#fff' } } adjustFontSizeToFit  numberOfLines={1}> Менежер </Text>
           </View>
           
          

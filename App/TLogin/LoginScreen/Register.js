@@ -62,12 +62,14 @@ class Register extends Component {
         resetScrollToCoords={{x:1,y:1}}
         scrollEnabled={false}>
 
-          <View style={Loginstyles.inputContainer}>
-            <Icon name="user" size={32} color="#f9ac19" />
-            <TextInput style={Loginstyles.inputs}
+          <View style={Loginstyles.inputContainer} >
+            
+              <Icon name="user" size={32} color="#f9ac19" />
+              <TextInput style={Loginstyles.inputs}
                 placeholder="Name"
                 underlineColorAndroid='transparent'
                 onChangeText={(name) => this.setState({name})}/>
+            
           </View>
           <View style={Loginstyles.inputContainer}>
             <Icon name="mail" size={32} color="#f9ac19" />
@@ -129,7 +131,8 @@ const Loginstyles = StyleSheet.create({
         height:45,
         marginBottom:20,
         flexDirection: 'row',
-        alignItems:'center'
+        alignItems:'center',
+        paddingLeft:10
     },
     inputs:{
         height:45,

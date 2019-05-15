@@ -94,7 +94,7 @@ class LoginForm extends Component {
         </View>
         
         <View style={Loginstyles.inputContainer}>
-        <Icon name="key" size={35} color="#f9ac19" />
+        <Icon name="key" size={35} color="#f9ac19"/>
           <TextInput style={Loginstyles.inputs}
               placeholder="Password"
               secureTextEntry={true}
@@ -167,7 +167,8 @@ const Loginstyles = StyleSheet.create({
       height:45,
       marginBottom:20,
       flexDirection: 'row',
-      alignItems:'center'
+      alignItems:'center',
+      paddingLeft:10
   },
   inputContainer1: {
     width:250,

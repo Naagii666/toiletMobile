@@ -1,8 +1,8 @@
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
-
+import Icon from 'react-native-vector-icons/FontAwesome'
 import React from 'react'
-import { View, Text, FlatList, RefreshControl,TouchableHighlight,StyleSheet,Alert } from 'react-native'
+import { View, Text, FlatList, RefreshControl,TouchableHighlight,StyleSheet,Alert ,StatusBar} from 'react-native'
 import moment from 'moment'
 import { Row, H2, H3, H4, Wrapper, Separator } from '../../Components'
 import { getMyComments } from './CommentActions'
@@ -11,10 +11,12 @@ const CommentItem = ({ item, index }) => {
 	let { commend, Date } = item
 
 	return (
-		<View style={{ paddingHorizontal: 20, }}>
+		<View style={{ paddingHorizontal: 20, backgroundColor:"#DCDCDC",borderRadius:10,paddingTop:8}}>
 			<Row justify='between'>
+			<Icon name='comments' size={20} color='#f9ac19' />
 				<H4>
-					Сэтгэгдэл
+				
+					<Text>Сэтгэгдэл</Text>
 				</H4>
 				<H4>
 					{moment(Date).format('YYYY-MM-DD')}
@@ -22,7 +24,7 @@ const CommentItem = ({ item, index }) => {
 			</Row>
 			<View style={{ paddingTop: 10, }}>
 				<H3>
-					{commend}
+					aaa{commend}
 				</H3>
 			</View>
 		</View>
@@ -54,10 +56,10 @@ class CommentView extends React.Component {
 			<Wrapper padding={20}>
 				<FlatList
 					refreshControl={
-					    <RefreshControl
-					        refreshing={loading}
-					        onRefresh={this._onRefresh.bind(this)}
-					    />
+						<RefreshControl
+							refreshing={loading}
+							onRefresh={this._onRefresh.bind(this)}
+						/>
 					}
 					contentContainerStyle={{
 						backgroundColor: '#fff',
@@ -65,6 +67,7 @@ class CommentView extends React.Component {
 					data={comments}
 					//data={[]}
 					renderItem={CommentItem} 
+					removeClippedSubviews={false}
 					ItemSeparatorComponent={Separator}
 					ListEmptyComponent={this._renderEmpty}
 				/>
