@@ -37,14 +37,14 @@ class MonitorMaps extends Component{
     let asSame = item.left
 
     return (
-      <TouchableOpacity onPress={() => this.onNavigateToFacebook(item.permalink_url)}>
+      <TouchableOpacity onPress={() => this.onNavigateToFacebook(item.PermalinkUrl)}>
         <View style={{ paddingVertical: 10, }}>
           <View style={[{ paddingHorizontal: 20 }, asSame == 0 ? { marginRight: 100 } : { marginLeft: 100 }]}>
             <View style={[asSame == 0 ? { backgroundColor: colors.gray, } : { backgroundColor: colors.dark_gray, }, { paddingVertical: 20, paddingHorizontal: 10, borderRadius: 5, }]}>
-              <Text style={{ color: '#365899', fontWeight: 'bold', }}>{item.FromName}: </Text><Text style={{ color: colors.black }}>{item.message}</Text>
+              <Text style={{ color: '#365899', fontWeight: 'bold', }}>{item.FromName}: </Text><Text style={{ color: colors.black }}>{item.Message}</Text>
             </View>
             <View style={[asSame == 0 ? { alignItems: 'flex-start' } : { alignItems: 'flex-end' }]}>
-              <Text>{moment(item.update_time).fromNow()}</Text>
+              <Text>{moment(item.UpdateTime).fromNow()}</Text>
             </View>
           </View>
         </View>

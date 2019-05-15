@@ -8,7 +8,7 @@ import { Row, H2, H3, H4, Wrapper, Separator } from '../../Components'
 import { getMyComments } from './CommentActions'
 
 const CommentItem = ({ item, index }) => {
-	let { commend, Date } = item
+	let { comment, Date } = item
 
 	return (
 		<View style={{ paddingHorizontal: 20, backgroundColor:"#DCDCDC",borderRadius:10,paddingTop:8}}>
