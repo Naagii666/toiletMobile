@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "459908506445",
+    "firebase_url": "https://toilet-c1aba.firebaseio.com",
+    "project_id": "toilet-c1aba",
+    "storage_bucket": "toilet-c1aba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:459908506445:android:21e273ddb8c78000",
+        "android_client_info": {
+          "package_name": "com.toiletmobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "459908506445-dlre7ovptprfpph5tu0bv05j4nklfjbb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAj5yFiY9xuJUo-1fm_0rN_6Z_KJdw7bbQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "459908506445-dlre7ovptprfpph5tu0bv05j4nklfjbb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

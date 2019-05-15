@@ -8,7 +8,7 @@ function* onAddComment({ payload }) {
 	try {
 		let token = yield getAuthenticationToken()
 		
-		let res = yield request(token).get(`toilet/api/comment/save_comment?commend=${payload}`)
+		let res = yield request(token).post(`toilet/api/comment?comment=${payload}`)
 
 		if(!res.data.success) {
 			return yield put({
