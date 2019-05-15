@@ -18,7 +18,7 @@ function* getFacebookComments() {
 
 		return yield put({
 			type: types.GET_FACEBOOK_COMMENTS_SUCCESS,
-			payload: res.data
+			payload: res.data.data
 		})
 	} catch(e) {
 		alert(e.message)
