@@ -2,13 +2,15 @@ import { take, cancel, takeEvery, takeLatest, put, call, fork, select, all, spaw
 import * as types from './CommentConstant'
 import { request, _getToken } from '../../utils/api'
 import { getAuthenticationToken } from '../../Services/storage'
+import { getCustomerId } from '../../Services/storage'
 import { NavigationActions } from 'react-navigation'
 
 function* onAddComment({ payload }) {
 	try {
 		let token = yield getAuthenticationToken()
-		
-		let res = yield request(token).post(`toilet/api/comment?comment=${payload}`)
+		let id = yield getCustomerId()
+
+		let res = yield request(token).post(`toilet/api/comment?comment=${payload}&customer_id=${id}`)
 
 		if(!res.data.success) {
 			return yield put({
@@ -33,7 +35,9 @@ function* onAddComment({ payload }) {
 function* getMyComments() {
 	try {
 		let token = yield getAuthenticationToken()
-		let res = yield request(token).get(`toilet/api/comment`)
+		let id = yield getCustomerId()
+
+		let res = yield request(token).get(`toilet/api/comment?customer_id=${id}`)
 
 		if(!res.data.success) {
 			return yield put({

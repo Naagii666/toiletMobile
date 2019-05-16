@@ -18,6 +18,7 @@ import Storage from 'react-native-storage';
 import { Images } from '../../Themes'
 import axios from 'axios'
 import { setAuthenticationToken } from '../../Services/storage'
+import { setCustomerId } from '../../Services/storage'
 import Icon from 'react-native-vector-icons/Entypo'
 
 class LoginForm extends Component {
@@ -44,17 +45,21 @@ class LoginForm extends Component {
       .then(response => {
         if(response.data.success) {
           let token = response.data.data.auth_token.toString();
+          let customers_id = response.data.data.customers_id.toString();
 
           let userData = {
             name: response.data.data.name,
             email: response.data.data.email,
             auth_token: token,
+            customers_id: customers_id
           }
+          // alert(JSON.stringify(userData));
 
           console.log('login userData ' + JSON.stringify(userData))
           // alert(userData);
 
           setAuthenticationToken(token)
+          setCustomerId(customers_id)
 
           let appState = {
             isLoggedIn: true,
