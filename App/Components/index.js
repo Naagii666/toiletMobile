@@ -44,7 +44,7 @@ export const Wrapper = (props) => {
 }
 
 export const Separator = () => {
-	return <View style={{ height: 1, backgroundColor: '#000', marginTop: 10, marginBottom: 10 }}/>
+	return <View style={{ height: 1, backgroundColor: '#f2f2f2', marginTop: 10, marginBottom: 10 }}/>
 }
 
 function _getJustify(type) {
@@ -70,7 +70,8 @@ export const Row = (props) => {
 		<View style={{
 			flexDirection: 'row', 
 			justifyContent: _getJustify(props.justify), 
-			alignItems: _getAlign(props.align) 
+			alignItems: _getAlign(props.align),
+			...props.style,
 		}}>
 			{props.children}
 		</View>

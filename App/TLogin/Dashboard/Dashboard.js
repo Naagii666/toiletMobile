@@ -20,6 +20,7 @@ import CardView from 'react-native-cardview'
 import Icon from 'react-native-vector-icons/FontAwesome'
 //import { deleteAuthenticationToken } from '../../Services/storage'
 import { getAuthenticationToken, deleteAuthenticationToken } from '../../Services/storage'
+import { getCustomerId, deleteCustomerId } from '../../Services/storage'
 const storage = new Storage({
   size: 1000,
   defaultExpires: 1000 * 3600 * 24,
@@ -82,7 +83,8 @@ class Dashboard extends Component {
           style: 'cancel',
         },
         {text: 'Тийм', onPress: () => {
-          deleteAuthenticationToken()
+          deleteAuthenticationToken(),
+          deleteCustomerId(),
           this.props.navigation.navigate('MainScreen')
         }},
       ],

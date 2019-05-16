@@ -12,22 +12,29 @@ const CommentItem = ({ item, index }) => {
 
 	return (
 		<View style={{ paddingHorizontal: 20,paddingVertical:8, backgroundColor:"#DCDCDC",borderRadius:10}}>
-			
-			<Row justify='between'>
-			<Icon name='comments' size={20} color='#f9ac19' />
-				<H4>
+			<Row>
+				<View>
+					{/* <Icon name='comments' size={40} color='#f9ac19' /> */}
+				</View>
+				<View>
+				<Row justify='between' style={{ flex: 1, }}>
 				
-					<Text>Сэтгэгдэл</Text>
-				</H4>
-				<H4>
-					{moment(Date).format('YYYY-MM-DD')}
-				</H4>
+						<H4>
+						
+							<Text>Сэтгэгдэл</Text>
+						</H4>
+						<H4>
+							{moment(Date).format('YYYY-MM-DD')}
+						</H4>
+					</Row>
+					<View style={{ paddingTop: 10, }}>
+						<H3>
+							{comment}
+						</H3>
+					</View>
+					
+				</View>
 			</Row>
-			<View style={{ paddingTop: 10, }}>
-				<H3>
-					{comment}
-				</H3>
-			</View>
 		</View>
 	)
 }
