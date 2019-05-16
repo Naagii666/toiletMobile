@@ -30,17 +30,22 @@ function* getFacebookComments() {
 function* onAddNegotation({ payload }) {
 	 try {
 		let token = yield getAuthenticationToken()
+
+		var formData = new FormData();
+		formData.append('customer_firstname', payload.firstName)
+		formData.append('customer_lastname', payload.client_lastName)
+		formData.append('customer_registrynumber', payload.register_first + payload.register_second + payload.register)
+		formData.append('description', payload.description)
+		formData.append('pre_payment_percentage', payload.pre_payment_percentage)
+		formData.append('loan_month', payload.loan_month)
+		formData.append('status', payload.statusName)
+		formData.append('products', payload.selected_products.map((product) => { return { product_id: product.products_id, quantity: product.quantity }}))
+		formData.append('city_id', payload.city_id)
+		formData.append('district_id', payload.district_id)
+		formData.append('khoroo_id', payload.khoroo_id)
+
 		//let params = queryString.parse(payload)
-		let res = yield request(token).get(`toilet/api/negotations/save_store`, {
-			params: {
-				products_id: payload.product.products_id,
-				client_firstname: payload.firstName,
-				client_lastname: payload.client_lastName,
-				register: payload.register,
-				status_id: payload.statusName,
-				products_count: payload.products_count
-			}
-		})
+		let res = yield request(token).post(`toilet/api/negotations`, formData)
 		
 		if(!res.data.success) {
 			return yield put({

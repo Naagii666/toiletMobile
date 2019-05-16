@@ -6,7 +6,12 @@ const InitialState = fromJS({
  	comment_list: {
  		loading: false,
  		data: []
- 	}  
+ 	},
+ 	locations: {
+ 		cities: [],
+ 		districts: [],
+ 		khoroos: [],
+ 	}
 })
 
 export default function ProductsReducer(state = InitialState, action) {
@@ -21,6 +26,12 @@ export default function ProductsReducer(state = InitialState, action) {
 			let { data } = action.payload
 			return state.setIn(['comment_list', 'loading'], false)
 						.setIn(['comment_list', 'data'], fromJS(data))
+		}
+
+		case types.GET_LOCATIONS_SUCCESS: {
+			return state.setIn(['locations', 'cities'], fromJS(action.payload.result.cities))
+						.setIn(['locations', 'districts'], fromJS(action.payload.result.district))
+						.setIn(['locations', 'khoroos'], fromJS(action.payload.result.khoroos))
 		}
 		default:
 			return state

@@ -7,7 +7,8 @@ export function request(token) {
 	var axiosInstance = axios.create({
 		baseURL: BASE_URL,
 		headers: {
-		  	'Authorization': 'bearer ' + token
+		  	'Authorization': 'bearer ' + token,
+		  	'Content-Type': 'application/x-www-form-urlencoded'
 	    }
 	})
 

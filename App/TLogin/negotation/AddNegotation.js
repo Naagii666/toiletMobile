@@ -2,97 +2,64 @@ import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import React from 'react'
 import _ from 'lodash'
-import { ActivityIndicator, Dimensions, View, Text,Image, FlatList, RefreshControl,TouchableHighlight,StyleSheet,Alert, TextInput,ScrollView,StatusBar  } from 'react-native'
+import { ActivityIndicator, Dimensions, View, Text,Image, FlatList, RefreshControl,TouchableHighlight,StyleSheet,Alert, TextInput,ScrollView,StatusBar, TouchableOpacity  } from 'react-native'
 import CardView from 'react-native-cardview';
 import Modal from 'react-native-modalbox'
-import { getMyComments } from '../product/ProductsActions'
+import { getMyComments, getLocations } from '../product/ProductsActions'
 import { Row, H2, H3, H4, Wrapper, Separator } from '../../Components'
+import { colors } from '../../utils'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import FlipCard from 'react-native-flip-card'
 import { Dropdown } from 'react-native-material-dropdown';
+import ModalSelector from 'react-native-modal-selector'
+//const DropDown = require('react-native-dropdown')
 import { onAddNegotation } from './NegotationActions'
 import Icon from 'react-native-vector-icons/Ionicons'
 
 const { width } = Dimensions.get('window')
 const cardWidth = (width / 2) - 40
-//const isValidate = firstName.length > 0 && client_lastName > 0 && register > 0 && client_lastName > 0;
-class AddNegotation  extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      firstName  : '',
-      client_lastName   : '',
-      register: '',
-      statusName: 0,
-      productID:'',
-      product: {},
-      products_count: 0,
-      productNumber:'',
-      loading: false,
-      product_chooser: false,
-    }
-  }
-  setStatus_Id(statusName){
-    switch(statusName){
-      case 'Амжилттай':
-        return 2;
-      case 'Цуцлагдсан':
-        return 3;
-      case 'Хүлээгдэж байгаа':
-        return 1;
-      default:
-        return 0;
-    }
-  }
-  componentDidMount() {
-	  this.props.getMyComments()
-	  //console.log(this.props.comments)
-	}
-  _alert(){
-    Alert.alert('Мэдэгдэл', 'хийгдэж байна')
-  }
-  _onRefresh(){
-    this.getMyComments()
+
+// const cities = [{
+//   value: 'Улаанбаатар',
+// }, {
+//   value: 'Дархан'
+// }, {
+//   value: 'Эрдэнэт'
+// }]
+import ProductList from './ProductList'
+
+class ProductSelector extends React.Component {
+  state = {
+    selected_products: this.props.selected_products
   }
 
-  onStatusChanged = (value) => {
-      let statusName
-      switch(value){
-        case 'Амжилттай':
-          statusName = 2;
-          break
-        case 'Цуцлагдсан':
-          statusName = 3;
-          break
-        case 'Хүлээгдэж байгаа':
-          statusName = 1;
-          break
-        default:
-          statusName = 0;
-          break
-      }
+  toggleProduct = (product) => {
+    let selected_products = this.state.selected_products
 
-      this.setState({ statusName })
+    let index = _.findIndex(selected_products, (cur) => {
+      return cur.products_id == product.products_id
+    })
+
+    if(index == -1) {
+      selected_products.push(product)
+      this.setState({
+        selected_products: selected_products
+      })
+      return
+    }
+
+    _.pullAt(selected_products, [index])
+
+    this.setState({
+      selected_products,
+    })
   }
-  formValidate(){
-    if(this.state.firstName && this.state.client_lastName && this.state.register)
-      return true;
-    else
-      return false;
-  }
-  InsertNegotation = () => {
-    //alert('Working');
-    const { NegotationData } = this.state
-    if(this.formValidate()==true)
-      this.props.onAddNegotation(this.state)
-    else
-      alert('Шаардлагатай талбаруудыг бөглөнө үү');
-    
-  }
+
   CommentItem = ({ item }) => {
     let { product_id, products_name, products_price, products_description, products_image,client_firstname } = item
-    const { navigate } = this.props.navigation
+
+    let is_selected = _.findIndex(this.state.selected_products, (product) =>  { return product.products_id == item.products_id }) != -1 
 
     return (
       <CardView
@@ -107,12 +74,7 @@ class AddNegotation  extends React.Component {
         />
         <TouchableHighlight
           underlayColor={'transparent'}
-          onPress={() => {
-            this.setState({
-              product: item,
-              product_chooser: false,
-            })
-          }}
+          onPress={() => this.toggleProduct(item)}
           style={{ flex:1/3, aspectRatio:1 }}>
           <View style={{ overflow: 'hidden', paddingBottom:15, justifyContent:'center', alignItems:'center' }}>
             <H4>{products_name}</H4>
@@ -122,7 +84,7 @@ class AddNegotation  extends React.Component {
                 source={{ uri: 'http://124.158.124.60:8080/toilet/'+products_image+'' }} 
               />
               {
-                this.state.product.products_id == item.products_id && (
+                is_selected && (
                     <View
                       style={{
                         backgroundColor: 'rgba(143, 201, 58, 0.6)',
@@ -142,7 +104,7 @@ class AddNegotation  extends React.Component {
               }
                
             </View>
-            <H3>{products_price}</H3>
+            <H3>{parseInt(products_price)}</H3>
           </View>
         </TouchableHighlight>
       </CardView>
@@ -153,137 +115,33 @@ class AddNegotation  extends React.Component {
     return <H3></H3>
   }
 
-	render() {
-    const { comments, loading } = this.props
-    const { navigate } = this.props.navigation
-    let statusData = [{
-      value: 'Хүлээгдэж байгaa',
-    }, {
-      value: 'Амжилттай',
-    }, {
-      value: 'Цуцлагдсан',
-    }];
-    let productData = [{
-      value: '1',
-    }, {
-      value: '2',
-    }, ]
-    // let productData = [{
-    //   value: this.CommentItem.bind(this),
-    // }];
-    //let productsTempate = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((cur) => { value: cur })
-    const MAX_PRODUCT_COUNT = 15
-    let productsTempate = []
-    for(let i = 1; i < MAX_PRODUCT_COUNT; i ++) {
-      productsTempate.push({
-        value: i,
-      })
-    }
+  onSaveChanges = () => {
+    this.props.onSelectedProducts(this.state.selected_products)
+  }
 
-		return (
-      <Wrapper>
-        <ScrollView style={styles.container}>
-  			  <KeyboardAwareScrollView contentContainerStyle={styles.container2}
-          resetScrollToCoords={{x:1,y:1}}
-          scrollEnabled={false}>
-            <View style={styles.inputContainer}>
-                  <TextInput style={styles.inputs}
-                      placeholder="Овог"
-                      keyboardType="default"
-                      underlineColorAndroid='transparent'
-                      onChangeText={client_lastName => this.setState({client_lastName})}
-                  />
-            </View>  
-            <View style={styles.inputContainer}>    
-                  <TextInput style={styles.inputs}
-                      placeholder="Нэр"
-                      keyboardType="default"
-                      underlineColorAndroid='transparent'
-                      onChangeText={firstName => this.setState({firstName})}
-                  />
-            </View>
-            <View style={styles.inputContainer}>
-                  <TextInput style={styles.inputs}
-                      placeholder="Регистэр"
-                      keyboardType="default"
-                      underlineColorAndroid='transparent'
-                      onChangeText={register => this.setState({register})}
-                  />
-            </View>
-            <View> 
-            {/* tolow */}
-            <Dropdown 
-                style={[styles.dropdownButton, styles.rowText]}
-                textStyle={styles.item}
-                onChangeText={this.onStatusChanged}
-                dropdownOffset={{top:5}}
-                containerStyle={{borderWidth:1, borderColor:'lightgrey', borderRadius:30,width:250,backgroundColor:'#fff',marginBottom:20,height:45,
-                }}
-                rippleCentered={true}
-                inputContainerStyle={{ borderBottomColor: 'transparent',marginLeft:16,
-                 }}
-                
-                label='Хэлцэлийн төлөв'
-                data={statusData}
-            />
-            </View>
-            <View> 
-              
-                {/* Bvteegdhvvn */}
-            <View style={styles.inputContainer}>
-              <TouchableHighlight  style={styles.inputs2} onPress={() => this.setState({ product_chooser: true })}>
-                <View>
-                    {
-                      _.isEmpty(this.state.product) ? (
-                        <Text>Бүтээгдэхүүн сонгох</Text>   
-                      ) : (
-                        <Text>{this.state.product.products_name}</Text>
-                      )
-                    }
-                </View>
-              </TouchableHighlight>
-              </View>
-            </View>
+  _renderFooter = () => {
+    return (
+      <View style={{ flexDirection: 'row', paddingVertical: 10, paddingHorizontal: 20, }}>
+        <TouchableHighlight onPress={this.props.onBack} style={[styles.buttonContainer,styles.loginButton, { flex: 1, backgroundColor: '#b5b5b5' }]}>
+          <Text style={styles.loginText}>Буцах</Text>
+        </TouchableHighlight>
+        <View style={{ width: 10, }}/>
+        <TouchableHighlight onPress={this.onSaveChanges} style={[styles.buttonContainer,styles.loginButton, { flex: 1, }]}>
+          <Text style={styles.loginText}>Тохируулах</Text>
+        </TouchableHighlight>
+      </View>
+    )
+  }
 
-            <View> 
-            {/* tolow */}
-              <Dropdown 
-                  style={[styles.dropdownButton,styles.rowText]}
-                  textStyle={styles.item}
-                  onChangeText={(value) => this.setState({ products_count: parseInt(value) })}
-                  dropdownOffset={{top:5}}
-                  containerStyle={{borderWidth:1, borderColor:'lightgrey', borderRadius:30,width:250,backgroundColor:'#fff',marginBottom:20,height:45,
-                  }}
-                  rippleCentered={true}
-                  inputContainerStyle={{ borderBottomColor: 'transparent',marginLeft:16,
-                   }}
-                  label='Тоо ширхэг'
-                  data={productsTempate}
-              />
-            </View>
-            
-          {
-            
-            loading ? (
-              <ActivityIndicator />
-            ) : (
-              
-              <TouchableHighlight onPress={this.InsertNegotation} style={[styles.buttonContainer,styles.loginButton]}>
-                <Text style={styles.loginText}>Хэлцэл үүсгэх</Text>
-              </TouchableHighlight>
-            )
-          }
-          
-        </KeyboardAwareScrollView>
-      </ScrollView>
-      <Modal isOpen={this.state.product_chooser}>
+  render() {
+    return (
         <View style={{ flex: 1, backgroundColor: '#fff' }}>
           <FlatList
             contentContainerStyle={{
               backgroundColor: '#fff',
             }}
             numColumns={2}
-            data={comments}
+            data={this.props.products}
             //data={[]}
             renderItem={this.CommentItem}
             removeClippedSubviews={false}
@@ -296,22 +154,405 @@ class AddNegotation  extends React.Component {
             //   />
             // }
           />
+          { this._renderFooter() }
         </View>
+    )
+  }
+}
+//const isValidate = firstName.length > 0 && client_lastName > 0 && register > 0 && client_lastName > 0;
+class AddNegotation  extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      firstName  : '',
+      client_lastName: '',
+      phone: '',
+      register_first: '',
+      register_second: '',
+      register: '',
+      statusName: 0,
+      product: {},
+      selected_products: [],
+      products_count: 0,
+      productNumber:'',
+      loading: false,
+      product_chooser: false,
+      pre_payment_percentage: 0,
+      loan_month: 1,
+      description: '',
+      city_id: 0,
+      district_id: 0,
+      khoroo_id: 0,
+    }
+  }
+  componentDidMount() {
+    this.props.getMyComments()
+    this.props.getLocations()
+    //console.log(this.props.comments)
+  }
+  _alert(){
+    Alert.alert('Мэдэгдэл', 'хийгдэж байна')
+  }
+  _onRefresh(){
+    this.getMyComments()
+  }
+
+  _getColor(value) {
+    switch(value){
+      case 4:
+        return colors.green
+      case 5:
+        return 'red'
+      case 2:
+        return colors.brand_color
+      default:
+        return 'black'
+    }
+  }
+
+  onStatusChanged = (value) => {
+      let statusName
+      switch(value){
+        case 'Шинэ':
+          statusName = 1;
+          break
+        case 'Хүлээгдэж байгаа':
+          statusName = 2;
+          break
+        case 'Үргэлжилж буй':
+          statusName = 3;
+          break
+        case 'Дууссан':
+          statusName = 4;
+          break
+        case 'Цуцлагдсан':
+          statusName = 5;
+          break
+        default:
+          statusName = 0;
+          break
+      }
+
+      this.setState({ statusName })
+  }
+  formValidate(){
+    if(this.state.firstName && this.state.register && this.state.phone)
+      return true;
+    else
+      return false;
+  }
+  InsertNegotation = () => {
+    const { NegotationData } = this.state
+    if(this.formValidate() == true)
+      this.props.onAddNegotation(this.state)
+    else
+      alert('Шаардлагатай талбаруудыг бөглөнө үү');
+    
+  }
+
+  onQuantityChanged = (product, quantity) => {
+    let selected_products = this.state.selected_products
+    let index = _.findIndex(selected_products, (cur) => cur.products_id == product.products_id)
+    selected_products[index].quantity = quantity
+    this.setState({
+      selected_products
+    })
+  }
+
+  render() {
+    const { comments, loading } = this.props
+    const { navigate } = this.props.navigation
+    let statusData = [{
+      value: 'Шинэ',
+    }, {
+      value: 'Хүлээгдэж байгаа',
+    }, {
+      value: 'Үргэлжилж буй',
+    }, {
+      value: 'Дууссан',
+    }, {
+      value: 'Цуцлагдсан',
+    }];
+
+    let productData = [{
+      value: '1',
+    }, {
+      value: '2',
+    }]
+
+    let alphapet = ['а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я'].map((cur, index) => { return { key: index, label: cur.toUpperCase() }})
+
+    // let productData = [{
+    //   value: this.CommentItem.bind(this),
+    // }];
+    //let productsTempate = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((cur) => { value: cur })
+
+    let { selected_products, statusName, pre_payment_percentage, loan_month, city_id, district_id } = this.state
+
+    let index = 0;
+
+
+    let cities = this.props.locations.cities.map((city) => {
+      return ({
+        label: city.name,
+        id: city.id,
+      })
+    })
+
+    let districts = []
+
+    if(this.props.locations.districts) {
+      this.props.locations.districts.forEach((dist) => {
+        if(dist.city_id == city_id) {
+          districts.push({
+            label: dist.name,
+            id: dist.id,
+          })
+        }
+      })
+    }
+    
+
+    let khoroos = []
+
+    if(this.props.locations.khoroos) {
+      this.props.locations.khoroos.forEach((dist) => {
+        if(dist.district_id == district_id) {
+          khoroos.push({
+            label: dist.name,
+            id: dist.id,
+          })
+        }
+      })
+    }
+    //alert(JSON.stringify(this.props.locations.cities[0]))
+
+    return (
+      <Wrapper>
+        <ScrollView style={styles.container}>
+          <KeyboardAwareScrollView contentContainerStyle={styles.container2}
+          resetScrollToCoords={{x:1,y:1}}
+          scrollEnabled={false}>
+            <View style={{ padding: 20, }}>
+              <View style={{ marginBottom: 10, }}>
+                <Text>
+                  1. Харилцагчийн мэдээлэл
+                </Text>
+              </View>
+              
+              <View style={{ flexDirection: 'row', }}>
+                <ModalSelector
+                    data={alphapet}
+                    cancelText={'Буцах'}
+                    initValue="-"
+                    onChange={(option)=> { this.setState({ register_first: option.label }) }} />
+                <View style={{ width: 10, }}/>
+                <ModalSelector
+                    data={alphapet}
+                    cancelText={'Буцах'}
+                    initValue="-"
+                    onChange={(option)=> { this.setState({ register_second: option.label }) }} />
+                <View style={[styles.inputContainer, { flex: 1, marginLeft: 10, }]}>
+                    <TextInput 
+                        style={styles.inputs}
+                        keyboardType='numeric'
+                        placeholder="Регистр"
+                        underlineColorAndroid='transparent'
+                        maxLength={8}
+                        onChangeText={register => this.setState({register})}
+                    />
+                </View>  
+              </View>
+              
+              <View style={styles.inputContainer}>    
+                    <TextInput style={styles.inputs}
+                        placeholder="Нэр"
+                        keyboardType="default"
+                        value={this.state.firstName}
+                        underlineColorAndroid='transparent'
+                        onChangeText={firstName => this.setState({firstName})}
+                    />
+              </View>
+              <View style={[styles.inputContainer, ]}>
+                    <TextInput style={styles.inputs}
+                        placeholder="Овог"
+                        keyboardType="default"
+                        value={this.state.client_lastName}
+                        underlineColorAndroid='transparent'
+                        onChangeText={client_lastName => this.setState({client_lastName})}
+                    />
+              </View>
+              <View style={[styles.inputContainer, { marginBottom: 0, }]}>
+                    <TextInput style={styles.inputs}
+                        placeholder="Утас"
+                        keyboardType="default"
+                        value={this.state.phone}
+                        underlineColorAndroid='transparent'
+                        onChangeText={phone => this.setState({ phone })}
+                    />
+              </View>
+            </View>
+                {/* Bvteegdhvvn */}
+            <View style={{ padding: 20, backgroundColor: colors.gray }}>
+              <View style={{ marginBottom: 10, }}>
+                <Text>
+                  2. Бүтээгдэхүүний мэдээлэл
+                </Text>
+              </View>
+              <View style={{ height: 1, backgroundColor: 'lightgrey' }} />
+              <ProductList 
+                products={selected_products} 
+                onQuantityChanged={this.onQuantityChanged}
+              />
+              <TouchableOpacity 
+                activeOpacity={0.6}
+                onPress={() => this.setState({ product_chooser: true })}
+              >
+                <View style={[styles.inputContainer, { marginBottom: 0, backgroundColor: colors.dark_gray }]}>
+                    <View style={styles.inputs2}>
+                        <Text>Бүтээгдэхүүн тохируулах</Text>
+                    </View>
+                </View>
+              </TouchableOpacity>
+            </View>
+
+            <View style={{ padding: 20, }}>
+              <View style={{ marginBottom: 10, }}>
+                <Text>
+                  3. Байршлын мэдээлэл
+                </Text>
+              </View>
+
+              <View style={{ marginBottom: 10, }}>
+                <ModalSelector
+                      data={cities}
+                      cancelText={'Буцах'}
+                      initValue="Хот/Аймаг"
+                      onChange={(option)=> { this.setState({ city_id: option.id }) }} />
+              </View>
+
+              <View style={{ marginBottom: 10, }}>
+                <ModalSelector
+                      data={districts}
+                      cancelText={'Буцах'}
+                      initValue="Дүүрэг/Сум"
+                      onChange={(option)=> { this.setState({ district_id: option.id }) }} />
+              </View>
+
+              <ModalSelector
+                    data={khoroos}
+                    cancelText={'Буцах'}
+                    initValue="Хороо/Баг"
+                    onChange={(option)=> { this.setState({ khoroo_id: option.id }) }} />
+            </View>
+
+            <View style={{ padding: 20, backgroundColor: colors.gray }}> 
+              {/* tolow */}
+              <View style={{ marginBottom: 10, }}>
+                  <Text>
+                    4. Хэлцлийн дэлгэрэнгүй
+                  </Text>
+              </View>
+              <Dropdown 
+                  style={[styles.dropdownButton, styles.rowText]}
+                  onChangeText={this.onStatusChanged}
+                  dropdownOffset={{top:5}}
+                  containerStyle={{
+                    borderWidth: 1, 
+                    borderColor:'lightgrey',
+                    borderRadius: 30,
+                    backgroundColor:'#fff',
+                    marginBottom: 20,
+                    height: 45,
+                  }}
+                  //textColor='red'
+                  textColor={this._getColor(statusName)}
+                  rippleCentered={true}
+                  inputContainerStyle={{ borderBottomColor: 'transparent', marginLeft:16, }}
+                  label='Хэлцэлийн төлөв'
+                  data={statusData}
+              />
+              <View style={{ flexDirection: 'row'}}>
+                <View style={[styles.inputContainer, { flex: 1, }]}>    
+                    <TextInput style={styles.inputs}
+                        placeholder="Урьдчилгаа хувь"
+                        keyboardType="numeric"
+                        underlineColorAndroid='transparent'
+                        value={this.state.pre_payment_percentage}
+                        onChangeText={pre_payment_percentage => this.setState({ pre_payment_percentage })}
+                    />
+                </View>
+                <View style={{ width: 10, }}/>
+                <View style={[styles.inputContainer, { flex: 1, }]}>    
+                    <TextInput style={styles.inputs}
+                        placeholder="Зээлийн сар"
+                        keyboardType="numeric"
+                        underlineColorAndroid='transparent'
+                        value={this.state.loan_month}
+                        onChangeText={loan_month => this.setState({ loan_month })}
+                    />
+                </View>
+              </View>
+
+              <View style={[styles.inputContainer, { marginBottom: 0, flex: 1, height: 100 }]}>    
+                    <TextInput style={[styles.inputs, { height: 90 }]}
+                        placeholder="Нэмэлт тайлбар"
+                        keyboardType="default"
+                        multiline={true}
+                        numberOfLines={12}
+                        underlineColorAndroid='transparent'
+                        onChangeText={description => this.setState({ description })}
+                    />
+              </View>
+            </View>
+            
+            <View style={{ padding: 20, }}>
+            {
+              
+              loading ? (
+                <ActivityIndicator />
+              ) : (
+                
+                <TouchableHighlight onPress={this.InsertNegotation} style={[styles.buttonContainer,styles.loginButton]}>
+                  <Text style={styles.loginText}>Хэлцэл үүсгэх</Text>
+                </TouchableHighlight>
+              )
+            }
+            </View>
+          
+        </KeyboardAwareScrollView>
+      </ScrollView>
+      <Modal 
+        isOpen={this.state.product_chooser}
+        onClosed={() => this.setState({ product_chooser: false })}
+      >
+        <ProductSelector 
+          products={comments}
+          selected_products={this.state.selected_products}
+          onSelectedProducts={(selected_products) => {
+            this.setState({ selected_products: selected_products.map((product) => Object.assign(product, {
+              quantity: 1,
+            })), product_chooser: false })
+          }}
+          onBack={() => this.setState({ product_chooser: false })}
+        />
       </Modal>
     </Wrapper>
-		
-		)
-	}
+    
+    )
+  }
 }
 export default connect(
   state => ({
       loading: state.negotation.getIn(['comment_list', 'loading']),
       comments: state.products.getIn(['comment_list', 'data']).toJS(),
+      locations: state.products.getIn(['locations']).toJS(),
   }),
   dispatch => {
     return {
       onAddNegotation: bindActionCreators(onAddNegotation, dispatch),
        getMyComments: bindActionCreators(getMyComments, dispatch),
+       getLocations: bindActionCreators(getLocations, dispatch)
       // navigate: this.props.navigation
     }
   }
@@ -321,27 +562,20 @@ const styles = StyleSheet.create({
   container:{
     flex: 1,
     backgroundColor: '#fff',
-    width:wp('100%'),
-    height:hp('98%'),
+    //width:wp('100%'),
+    //height:hp('98%'),
+    //paddingHorizontal: 20,
   },
   container2: {
-    paddingTop:'10%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    //paddingTop:'10%',
+    //justifyContent: 'center',
+    //alignItems: 'center',
   },
   dropdownButton: {
     flex: 1,
     
     fontSize:15
   },
-  dropdownContainer: {
-    height: 'auto',
-    flexDirection: 'row',
-    width:250,
-    
-  },
-  
-
   inputContainer: {
     borderBottomColor: '#F5FCFF',
     backgroundColor: '#fff',
@@ -349,7 +583,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor:'lightgrey',
     borderWidth:1,
-    width:250,
+    //width:250,
+    //paddingHorizontal: 20,
     height:45,
     fontSize:15,
     marginBottom:20,
@@ -371,18 +606,19 @@ inputs2:{
 },
 buttonContainer: {
   height:45,
-  flexDirection: 'row',
+  //flexDirection: 'row',
   justifyContent: 'center',
   alignItems: 'center',
-  width:250,
+  //alignItems: 'center',
+  //width:250,
   borderRadius:30,
 },
-  rowText:{
-    flexDirection: 'row',
-    fontSize:15,
-    justifyContent: 'space-between',
-    
-  },
+rowText:{
+  flexDirection: 'row',
+  fontSize:15,
+  justifyContent: 'space-between',
+  
+},
 inputs:{
     height:45,
     marginLeft:16,
@@ -397,11 +633,10 @@ inputs:{
   button: {
     alignItems: 'center',
     backgroundColor: '#f9ac19',
-    padding: 10,
-    margin: 10,
-    // flex:1/3,
+    //padding: 10,
+    //margin: 10,
     borderRadius:10,
-    alignContent: 'flex-end',
+    justifyContent: 'center',
   },
   photo: {
     height: 50,
