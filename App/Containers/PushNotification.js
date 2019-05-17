@@ -59,7 +59,7 @@ class PushNotification extends Component {
         OneSignal.addEventListener('emailSubscription', this.onEmailRegistrationChange);
         OneSignal.setRequiresUserPrivacyConsent(requiresConsent);
 
-        OneSignal.init("147e54fb-da57-4564-a2ee-a87b1a390c83", {kOSSettingsKeyAutoPrompt : true});
+        OneSignal.init("80a93efa-1019-41f9-91ba-caae80ccfa8a", {kOSSettingsKeyAutoPrompt : true});
     }
 
     validateEmail(email) {
