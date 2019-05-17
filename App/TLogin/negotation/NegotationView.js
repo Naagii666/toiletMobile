@@ -10,16 +10,33 @@ import { getMyComments, onSetSelectedNegotiation } from './NegotationActions'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import NewNegotation from './NewNegotation'
 
-function Color(statusName){
-  switch(statusName){
-    case 'Амжилттай':
+function Color(status){
+  switch(status){
+    case 1:
       return '#8FC93A';
-    case 'Цуцлагдсан':
+    case 2:
       return '#ff0000';
-    case 'Хүлээгдэж байгаа':
+    case 3:
       return '#f9ac19';
+    case 4:
+        return 'white';
     default:
-      return 'white';
+      return 'black';
+  }
+}
+
+function Status(status){
+  switch(status){
+    case 1:
+      return 'Шинэ';
+    case 2:
+      return 'Хүлээгдэж байгаа';  
+    case 3:
+      return 'Үрэглжилж буй';
+    case 4:
+        return 'Дууссан';
+    default:
+      return 'Цуцлагдсан';  
   }
 }
 
@@ -40,31 +57,33 @@ class NegotationView extends React.Component {
 
   CommentItem ({ item }){
     let { 
-      client_firstname, client_lastname, register, statusName, date,
-      cityName, districtName, khorooName, productName, productImage, productPrice
+      first_name, last_name, registry_number, status, date, phone, name,
+      city_name, district_name, khoroo_name, products_name, products_image, total_price
     } = item
     
     const { navigate } = this.props.navigation
     return (
       <TouchableHighlight underlayColor={'#f2f2f2'}  onPress={() => {
-          this.props.onSetSelectedNegotiation(item)
-          navigate('NegotationDetial',{
-            client_firstname: client_firstname,
-            client_lastname: client_lastname,
-            register: register,
-            statusName: statusName,
-            date: date,
-            cityName: cityName,
-            districtName: districtName,
-            khorooName: khorooName,
-            productName: productName,
-            productImage: productImage,
-            productPrice: productPrice,
-          }) }
-      } >
+        this.props.onSetSelectedNegotiation(item)
+        navigate('NegotationDetial',{
+          first_name: first_name,
+          last_name: last_name,
+          registry_number: registry_number,
+          status: Status(status),
+          phone: phone,
+          date: date,
+          name: name,
+          city_name: city_name,
+          district_name: district_name,
+          khoroo_name: khoroo_name,
+          products_name: products_name,
+          products_image: products_image,
+          total_price: total_price,
+        }) }}
+      >
         <View style={{ paddingHorizontal: 10, }}>
           <View style={{flexDirection: 'row', flex:1}}>
-            <Icon name='circle' size={60} color={Color(statusName)} style={{
+            <Icon name='circle' size={60} color={Color(status)} style={{
                 textShadowColor: '#dcdcdc',
                 shadowOpacity: 0.4,
                 shadowRadius: 5,
@@ -72,6 +91,7 @@ class NegotationView extends React.Component {
             }}/>
 
             <View style={{paddingLeft: 10, paddingTop:5,flex:1,flexDirection: 'row', justifyContent:'space-between',}}>
+          
               <H3>
                 Хэлцэл
               </H3>
@@ -80,9 +100,11 @@ class NegotationView extends React.Component {
               </H3>
             </View>
             <View style={{flexWrap: 'wrap',alignItems:'center',justifyContent:'center',flexDirection: 'row',flex:1}}>
-              <Text> { client_firstname } </Text>
-              <Text> { register } </Text>
-              <Text> { statusName } </Text>
+            <Row>
+                <H3> { first_name } </H3>
+                <H3> { last_name } </H3>
+            </Row>
+                <Text> { Status(status) } </Text>
             </View>
           </View>
         </View>
