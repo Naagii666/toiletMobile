@@ -58,7 +58,7 @@ class NegotationDetial extends Component{
             <Text> Төлбөв - {statusName}</Text>
           </View>
           <View>
-            <TouchableOpacity onPress={ () => this._alert() } style={styles.button}>
+            <TouchableOpacity onPress={() => navigation.navigate({ routeName: 'EditNegotiation'}) } style={styles.button}>
               <Text> Засварлах </Text>
             </TouchableOpacity>
           </View>

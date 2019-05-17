@@ -10,7 +10,11 @@ const InitialState = fromJS({
  	facebook_comments: {
  		loading: false,
  		data: [],
- 	}
+ 	},
+ 	selected_negotiation: {
+ 		fetching: false,
+ 		data: {},
+ 	},
 })
 
 export default function NegotationReducer(state = InitialState, action) {
@@ -37,6 +41,17 @@ export default function NegotationReducer(state = InitialState, action) {
 						.setIn(['facebook_comments', 'data'], fromJS(action.payload.data))
 		}
 
+		case types.ON_EDIT_NEGOTATION:
+			return state.setIn(['comment_list', 'loading'], true)
+		case types.ON_EDIT_NEGOTATION_FAILED:
+			return state.setIn(['comment_list', 'loading'], false)
+		case types.ON_EDIT_NEGOTATION_SUCCESS: {
+			// let comments = state.getIn(['comment_list', 'data'])
+			// comments = comments.unshift(fromJS(action.payload.negotations))
+			return state.setIn(['comment_list', 'loading'], false)
+						//.setIn(['comment_list', 'data'], comments)
+		}	
+			
 		case types.ON_ADD_NEGOTATION:
 			return state.setIn(['comment_list', 'loading'], true)
 		case types.ON_ADD_NEGOTATION_FAILED:
@@ -46,6 +61,10 @@ export default function NegotationReducer(state = InitialState, action) {
 			// comments = comments.unshift(fromJS(action.payload.negotations))
 			return state.setIn(['comment_list', 'loading'], false)
 						//.setIn(['comment_list', 'data'], comments)
+		}
+
+		case types.ON_SET_SELECTED_NEGOTIATION: {
+			return state.setIn(['selected_negotiation', 'data'], fromJS(action.payload))
 		}
 		default:
 			return state

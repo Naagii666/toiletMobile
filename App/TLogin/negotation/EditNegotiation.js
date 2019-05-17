@@ -14,7 +14,7 @@ import FlipCard from 'react-native-flip-card'
 import { Dropdown } from 'react-native-material-dropdown';
 import ModalSelector from 'react-native-modal-selector'
 //const DropDown = require('react-native-dropdown')
-import { onAddNegotation } from './NegotationActions'
+import { onAddNegotation, onEditNegotation } from './NegotationActions'
 import Icon from 'react-native-vector-icons/Ionicons'
 
 const { width } = Dimensions.get('window')
@@ -159,35 +159,37 @@ class ProductSelector extends React.Component {
     )
   }
 }
+
+const statusData = [{
+      value: 'Шинэ',
+    }, {
+      value: 'Хүлээгдэж байгаа',
+    }, {
+      value: 'Үргэлжилж буй',
+    }, {
+      value: 'Дууссан',
+    }, {
+      value: 'Цуцлагдсан',
+    }];
 //const isValidate = firstName.length > 0 && client_lastName > 0 && register > 0 && client_lastName > 0;
-class AddNegotation  extends React.Component {
+class EditNegotation  extends React.Component {
   constructor(props) {
     super(props);
+    console.log(props.negotiation)
     this.state = {
-      firstName  : '',
-      client_lastName: '',
-      phone: '',
-      register_first: '',
-      register_second: '',
-      register: '',
-      statusName: 0,
-      product: {},
+      negotiation_id: props.negotiation.negotiation_id,
+      statusName: props.negotiation.status,
       selected_products: [],
-      products_count: 0,
-      productNumber:'',
       loading: false,
       product_chooser: false,
-      pre_payment_percentage: 0,
-      loan_month: 20,
-      description: '',
-      city_id: 0,
-      district_id: 0,
-      khoroo_id: 0,
+      pre_payment_percentage: props.negotiation.pre_payment_percentage,
+      loan_month: props.negotiation.loan_month,
+      description: props.negotiation.description,
     }
   }
   componentDidMount() {
     this.props.getMyComments()
-    this.props.getLocations()
+    //this.props.getLocations()
     //console.log(this.props.comments)
   }
   _alert(){
@@ -236,42 +238,12 @@ class AddNegotation  extends React.Component {
       this.setState({ statusName })
   }
   formValidate() {
-    let { firstName, phone, register, selected_products, city_id, district_id, khoroo_id, statusName, pre_payment_percentage, loan_month } = this.state
-    
-    if(!register) {
-      alert('Харилцагчийн регистр оруулна уу')
-      return true
-    }
-
-    if(!firstName) {
-      alert('Харилцагчийн нэр оруулна уу')
-      return true
-    }
-
-    if(!phone) {
-      alert('Харилцагчийн утас оруулна уу')
-      return true
-    }
-
-    if(selected_products.length == 0) {
-      alert('Бүтээгдэхүүн сонгоно уу')
-      return true
-    }
-
-    if(city_id == 0) {
-      alert('Хот/Аймаг сонгоно уу')
-      return true
-    }
-
-    if(district_id == 0) {
-      alert('Дүүрэг/Сум сонгоно уу')
-      return true
-    }
-
-    if(khoroo_id == 0) {
-      alert('Хороо/Баг сонгоно уу')
-      return true
-    }
+    let { selected_products, statusName, pre_payment_percentage, loan_month } = this.state
+  
+    // if(selected_products.length == 0) {
+    //   alert('Бүтээгдэхүүн сонгоно уу')
+    //   return true
+    // }
 
     if(statusName == 0) {
       alert('Хэлцлийн төлөв сонгоно уу')
@@ -281,10 +253,10 @@ class AddNegotation  extends React.Component {
     return false
   }
 
-  InsertNegotation = () => {
+  EditNegotation = () => {
     let error = this.formValidate()
     if(error) return
-    this.props.onAddNegotation(this.state)
+    this.props.onEditNegotation(this.state)
   }
 
   onQuantityChanged = (product, quantity) => {
@@ -299,70 +271,10 @@ class AddNegotation  extends React.Component {
   render() {
     const { comments, loading } = this.props
     const { navigate } = this.props.navigation
-    let statusData = [{
-      value: 'Шинэ',
-    }, {
-      value: 'Хүлээгдэж байгаа',
-    }, {
-      value: 'Үргэлжилж буй',
-    }, {
-      value: 'Дууссан',
-    }, {
-      value: 'Цуцлагдсан',
-    }];
 
-    let productData = [{
-      value: '1',
-    }, {
-      value: '2',
-    }]
+    let { selected_products, statusName, description, pre_payment_percentage, loan_month, city_id, district_id } = this.state
 
-    let alphapet = ['а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я'].map((cur, index) => { return { key: index, label: cur.toUpperCase() }})
-
-    // let productData = [{
-    //   value: this.CommentItem.bind(this),
-    // }];
-    //let productsTempate = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((cur) => { value: cur })
-
-    let { selected_products, statusName, pre_payment_percentage, loan_month, city_id, district_id } = this.state
-
-    let index = 0;
-
-
-    let cities = this.props.locations.cities.map((city) => {
-      return ({
-        label: city.name,
-        id: city.id,
-      })
-    })
-
-    let districts = []
-
-    if(this.props.locations.districts) {
-      this.props.locations.districts.forEach((dist) => {
-        if(dist.city_id == city_id) {
-          districts.push({
-            label: dist.name,
-            id: dist.id,
-          })
-        }
-      })
-    }
-    
-
-    let khoroos = []
-
-    if(this.props.locations.khoroos) {
-      this.props.locations.khoroos.forEach((dist) => {
-        if(dist.district_id == district_id) {
-          khoroos.push({
-            label: dist.name,
-            id: dist.id,
-          })
-        }
-      })
-    }
-    //alert(JSON.stringify(this.props.locations.cities[0]))
+    console.log(statusName)
 
     return (
       <Wrapper>
@@ -370,67 +282,8 @@ class AddNegotation  extends React.Component {
           <KeyboardAwareScrollView contentContainerStyle={styles.container2}
           resetScrollToCoords={{x:1,y:1}}
           scrollEnabled={false}>
-            <View style={{ padding: 20, }}>
-              <View style={{ marginBottom: 10, }}>
-                <Text>
-                  1. Харилцагчийн мэдээлэл
-                </Text>
-              </View>
-              
-              <View style={{ flexDirection: 'row', }}>
-                <ModalSelector
-                    data={alphapet}
-                    cancelText={'Буцах'}
-                    initValue="-"
-                    onChange={(option)=> { this.setState({ register_first: option.label }) }} />
-                <View style={{ width: 10, }}/>
-                <ModalSelector
-                    data={alphapet}
-                    cancelText={'Буцах'}
-                    initValue="-"
-                    onChange={(option)=> { this.setState({ register_second: option.label }) }} />
-                <View style={[styles.inputContainer, { flex: 1, marginLeft: 10, }]}>
-                    <TextInput 
-                        style={styles.inputs}
-                        keyboardType='numeric'
-                        placeholder="Регистр"
-                        underlineColorAndroid='transparent'
-                        maxLength={8}
-                        onChangeText={register => this.setState({register})}
-                    />
-                </View>  
-              </View>
-              
-              <View style={styles.inputContainer}>    
-                    <TextInput style={styles.inputs}
-                        placeholder="Нэр"
-                        keyboardType="default"
-                        value={this.state.firstName}
-                        underlineColorAndroid='transparent'
-                        onChangeText={firstName => this.setState({firstName})}
-                    />
-              </View>
-              <View style={[styles.inputContainer, ]}>
-                    <TextInput style={styles.inputs}
-                        placeholder="Овог"
-                        keyboardType="default"
-                        value={this.state.client_lastName}
-                        underlineColorAndroid='transparent'
-                        onChangeText={client_lastName => this.setState({client_lastName})}
-                    />
-              </View>
-              <View style={[styles.inputContainer, { marginBottom: 0, }]}>
-                    <TextInput style={styles.inputs}
-                        placeholder="Утас"
-                        keyboardType="default"
-                        value={this.state.phone}
-                        underlineColorAndroid='transparent'
-                        onChangeText={phone => this.setState({ phone })}
-                    />
-              </View>
-            </View>
                 {/* Bvteegdhvvn */}
-            <View style={{ padding: 20, backgroundColor: colors.gray }}>
+            {/*<View style={{ padding: 20, backgroundColor: colors.gray }}>
               <View style={{ marginBottom: 10, }}>
                 <Text>
                   2. Бүтээгдэхүүний мэдээлэл
@@ -451,38 +304,7 @@ class AddNegotation  extends React.Component {
                     </View>
                 </View>
               </TouchableOpacity>
-            </View>
-
-            <View style={{ padding: 20, }}>
-              <View style={{ marginBottom: 10, }}>
-                <Text>
-                  3. Байршлын мэдээлэл
-                </Text>
-              </View>
-
-              <View style={{ marginBottom: 10, }}>
-                <ModalSelector
-                      data={cities}
-                      cancelText={'Буцах'}
-                      initValue="Хот/Аймаг"
-                      initValueTextStyle={{ color: '#b5b5b5' }}
-                      onChange={(option)=> { this.setState({ city_id: option.id }) }} />
-              </View>
-
-              <View style={{ marginBottom: 10, }}>
-                <ModalSelector
-                      data={districts}
-                      cancelText={'Буцах'}
-                      initValue="Дүүрэг/Сум"
-                      onChange={(option)=> { this.setState({ district_id: option.id }) }} />
-              </View>
-
-              <ModalSelector
-                    data={khoroos}
-                    cancelText={'Буцах'}
-                    initValue="Хороо/Баг"
-                    onChange={(option)=> { this.setState({ khoroo_id: option.id }) }} />
-            </View>
+            </View>*/}
 
             <View style={{ padding: 20, backgroundColor: colors.gray }}> 
               {/* tolow */}
@@ -508,16 +330,18 @@ class AddNegotation  extends React.Component {
                   rippleCentered={true}
                   inputContainerStyle={{ borderBottomColor: 'transparent', marginLeft:16, }}
                   label='Хэлцэлийн төлөв'
+                  value={statusData[statusName - 1].value}
                   data={statusData}
               />
               <View style={{ flexDirection: 'row'}}>
                 <View style={[styles.inputContainer, { flex: 1, }]}>    
-                    <TextInput style={styles.inputs}
+                    <TextInput 
+                        style={styles.inputs}
                         placeholder="Урьдчилгаа хувь"
                         keyboardType="numeric"
                         underlineColorAndroid='transparent'
-                        value={this.state.pre_payment_percentage}
-                        onChangeText={pre_payment_percentage => this.setState({ pre_payment_percentage })}
+                        value={String(pre_payment_percentage)}
+                        onChangeText={(pre_payment_percentage) => this.setState({ pre_payment_percentage })}
                     />
                 </View>
                 <View style={{ width: 10, }}/>
@@ -526,8 +350,10 @@ class AddNegotation  extends React.Component {
                         placeholder="Зээлийн сар"
                         keyboardType="numeric"
                         underlineColorAndroid='transparent'
-                        value={this.state.loan_month}
-                        onChangeText={loan_month => this.setState({ loan_month })}
+                        value={String(loan_month)}
+                        onChangeText={(loan_month) => { 
+                          this.setState({ loan_month }) 
+                        }}
                     />
                 </View>
               </View>
@@ -535,7 +361,8 @@ class AddNegotation  extends React.Component {
               <View style={[styles.inputContainer, { marginBottom: 0, flex: 1, height: 100 }]}>    
                     <TextInput style={[styles.inputs, { height: 90 }]}
                         placeholder="Нэмэлт тайлбар"
-                        keyboardType="default"
+                        //keyboardType="default"
+                        value={description}
                         multiline={true}
                         numberOfLines={12}
                         underlineColorAndroid='transparent'
@@ -551,8 +378,8 @@ class AddNegotation  extends React.Component {
                 <ActivityIndicator />
               ) : (
                 
-                <TouchableHighlight onPress={this.InsertNegotation} style={[styles.buttonContainer,styles.loginButton]}>
-                  <Text style={styles.loginText}>Хэлцэл үүсгэх</Text>
+                <TouchableHighlight onPress={this.EditNegotation} style={[styles.buttonContainer,styles.loginButton]}>
+                  <Text style={styles.loginText}>Хэлцэл засварлах</Text>
                 </TouchableHighlight>
               )
             }
@@ -584,17 +411,19 @@ export default connect(
   state => ({
       loading: state.negotation.getIn(['comment_list', 'loading']),
       comments: state.products.getIn(['comment_list', 'data']).toJS(),
-      locations: state.products.getIn(['locations']).toJS(),
+      negotiation: state.negotation.getIn(['selected_negotiation', 'data']).toJS(),
+      //locations: state.products.getIn(['locations']).toJS(),
   }),
   dispatch => {
     return {
       onAddNegotation: bindActionCreators(onAddNegotation, dispatch),
+       onEditNegotation: bindActionCreators(onEditNegotation, dispatch),
        getMyComments: bindActionCreators(getMyComments, dispatch),
-       getLocations: bindActionCreators(getLocations, dispatch)
+       //getLocations: bindActionCreators(getLocations, dispatch)
       // navigate: this.props.navigation
     }
   }
-)(AddNegotation)
+)(EditNegotation)
 
 const styles = StyleSheet.create({
   container:{

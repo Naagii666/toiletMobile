@@ -6,7 +6,7 @@ import React from 'react'
 import { View, Text, FlatList, RefreshControl, TouchableHighlight, StyleSheet, Alert, StatusBar } from 'react-native'
 import moment from 'moment'
 import { Row, H2, H3, H4, Wrapper, Separator } from '../../Components'
-import { getMyComments } from './NegotationActions'
+import { getMyComments, onSetSelectedNegotiation } from './NegotationActions'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import NewNegotation from './NewNegotation'
 
@@ -46,19 +46,22 @@ class NegotationView extends React.Component {
     
     const { navigate } = this.props.navigation
     return (
-      <TouchableHighlight underlayColor={'#f2f2f2'}  onPress={ () => navigate('NegotationDetial',{
-        client_firstname: client_firstname,
-        client_lastname: client_lastname,
-        register: register,
-        statusName: statusName,
-        date: date,
-        cityName: cityName,
-        districtName: districtName,
-        khorooName: khorooName,
-        productName: productName,
-        productImage: productImage,
-        productPrice: productPrice,
-      }) } >
+      <TouchableHighlight underlayColor={'#f2f2f2'}  onPress={() => {
+          this.props.onSetSelectedNegotiation(item)
+          navigate('NegotationDetial',{
+            client_firstname: client_firstname,
+            client_lastname: client_lastname,
+            register: register,
+            statusName: statusName,
+            date: date,
+            cityName: cityName,
+            districtName: districtName,
+            khorooName: khorooName,
+            productName: productName,
+            productImage: productImage,
+            productPrice: productPrice,
+          }) }
+      } >
         <View style={{ paddingHorizontal: 10, }}>
           <View style={{flexDirection: 'row', flex:1}}>
             <Icon name='circle' size={60} color={Color(statusName)} style={{
@@ -137,6 +140,7 @@ export default connect(
   }),
   dispatch => {
     return {
+      onSetSelectedNegotiation: bindActionCreators(onSetSelectedNegotiation, dispatch),
       getMyComments: bindActionCreators(getMyComments, dispatch),
       // navigate: this.props.navigation
     }
