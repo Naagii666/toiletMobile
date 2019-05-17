@@ -250,7 +250,7 @@ const PrimaryNav = createStackNavigator({
   // Default config for all screens
   // headerMode: 'none',
   //initialRouteName: 'LaunchScreen',
-  initialRouteName: 'AddNegotation',
+  initialRouteName: 'LaunchScreen',
   navigationOptions: {
     headerStyle: styles.header
   }

@@ -19,17 +19,19 @@ class NegotationDetial extends Component{
 
   render() {
     const { navigation } = this.props;
-    const client_firstname = navigation.getParam('client_firstname', 'some default value');
-    const client_lastname = navigation.getParam('client_lastname', 'some default value');
-    const register = navigation.getParam('register', 'some default value');
-    const statusName = navigation.getParam('statusName', 'some default value');
+    const first_name = navigation.getParam('first_name', 'some default value');
+    const last_name = navigation.getParam('last_name', 'some default value');
+    const registry_number = navigation.getParam('registry_number', 'some default value');
+    const status = navigation.getParam('status', 'some default value');
+    const phone = navigation.getParam('phone', 'some default value');
     const date = navigation.getParam('date', 'some default value');
-    const cityName = navigation.getParam('cityName', 'some default value');
-    const districtName = navigation.getParam('cityNadistrictNameme', 'some default value');
-    const khorooName = navigation.getParam('khorooName', 'some default value');
-    const productPrice = navigation.getParam('productPrice', 'NO-ID');
-    const productName = navigation.getParam('productName', 'some default value');
-    const productImage = navigation.getParam('productImage', 'some default value');
+    const name = navigation.getParam('name', 'some default value');
+    const city_name = navigation.getParam('city_name', 'some default value');
+    const district_name = navigation.getParam('district_name', 'some default value');
+    const khoroo_name = navigation.getParam('khoroo_name', 'some default value');
+    const total_price = navigation.getParam('total_price', 'NO-ID');
+    const products_name = navigation.getParam('products_name', 'some default value');
+    const products_image = navigation.getParam('products_image', 'some default value');
     const regex = /(<([^>]+)>)/ig;
     return(
        <ScrollView>
@@ -38,24 +40,24 @@ class NegotationDetial extends Component{
             <Text> Үүсгэсэн огноо:  { moment(date).format('YYYY-MM-DD hh:mm') }</Text>
           </View>
           <View style={styles.rowText}>
-            <Text style={{color:'#f9ac19',fontSize:16}}>Нэр: {client_firstname}</Text>
+            <Text style={{color:'#f9ac19',fontSize:16}}>Нэр: {first_name}</Text>
             <View style={{flex: 1}}>
-              <Text style={{textAlign: 'right',color:'#f9ac19',fontSize:16}}>Регистер: {register}</Text>
-              <Text style={{textAlign: 'right',color:'#f9ac19',fontSize:16}}>Утас: {register}</Text>
+              <Text style={{textAlign: 'right',color:'#f9ac19',fontSize:16}}>Регистер: {registry_number}</Text>
+              <Text style={{textAlign: 'right',color:'#f9ac19',fontSize:16}}>Утас: {phone}</Text>
             </View>
           </View>
           <View>
-          <Text> Хаяг: { cityName } {districtName} {khorooName} </Text>
+          <Text> Хаяг: {city_name}, {district_name}, {khoroo_name} </Text>
             <View>
-                <Text style={{color:'#f9ac19',fontSize:16}}>Бүтээгдэхүүний нэр: {productName}</Text>
-                <Text style={{color:'#f9ac19',fontSize:16}}>Үнэ: {productPrice}</Text>
+                <Text style={{color:'#f9ac19',fontSize:16}}>Бүтээгдэхүүний нэр: {products_name}</Text>
+                <Text style={{color:'#f9ac19',fontSize:16}}>Үнэ: {total_price}</Text>
              </View>
             <Image 
               style={{width: '100%', height:350, }}
-              source={{ uri: 'http://124.158.124.60:8080/toilet/'+productImage+'' }} />
+              source={{ uri: 'http://124.158.124.60:8080/toilet/'+products_image+'' }} />
           </View>
           <View style={{alignItems:'center'}}>
-            <Text> Төлбөв - {statusName}</Text>
+            <Text> Төлөв - {status}</Text>
           </View>
           <View>
             <TouchableOpacity onPress={ () => this._alert() } style={styles.button}>
