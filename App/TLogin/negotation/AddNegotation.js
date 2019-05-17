@@ -178,7 +178,7 @@ class AddNegotation  extends React.Component {
       loading: false,
       product_chooser: false,
       pre_payment_percentage: 0,
-      loan_month: 1,
+      loan_month: 20,
       description: '',
       city_id: 0,
       district_id: 0,
@@ -235,19 +235,56 @@ class AddNegotation  extends React.Component {
 
       this.setState({ statusName })
   }
-  formValidate(){
-    if(this.state.firstName && this.state.register && this.state.phone)
-      return true;
-    else
-      return false;
-  }
-  InsertNegotation = () => {
-    const { NegotationData } = this.state
-    if(this.formValidate() == true)
-      this.props.onAddNegotation(this.state)
-    else
-      alert('Шаардлагатай талбаруудыг бөглөнө үү');
+  formValidate() {
+    let { firstName, phone, register, selected_products, city_id, district_id, khoroo_id, statusName, pre_payment_percentage, loan_month } = this.state
     
+    if(!register) {
+      alert('Харилцагчийн регистр оруулна уу')
+      return true
+    }
+
+    if(!firstName) {
+      alert('Харилцагчийн нэр оруулна уу')
+      return true
+    }
+
+    if(!phone) {
+      alert('Харилцагчийн утас оруулна уу')
+      return true
+    }
+
+    if(selected_products.length == 0) {
+      alert('Бүтээгдэхүүн сонгоно уу')
+      return true
+    }
+
+    if(city_id == 0) {
+      alert('Хот/Аймаг сонгоно уу')
+      return true
+    }
+
+    if(district_id == 0) {
+      alert('Дүүрэг/Сум сонгоно уу')
+      return true
+    }
+
+    if(khoroo_id == 0) {
+      alert('Хороо/Баг сонгоно уу')
+      return true
+    }
+
+    if(statusName == 0) {
+      alert('Хэлцлийн төлөв сонгоно уу')
+      return true
+    }
+
+    return false
+  }
+
+  InsertNegotation = () => {
+    let error = this.formValidate()
+    if(error) return
+    this.props.onAddNegotation(this.state)
   }
 
   onQuantityChanged = (product, quantity) => {

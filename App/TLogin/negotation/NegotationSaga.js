@@ -18,7 +18,7 @@ function* getFacebookComments() {
 
 		return yield put({
 			type: types.GET_FACEBOOK_COMMENTS_SUCCESS,
-			payload: res.data.data
+			payload: res.data
 		})
 	} catch(e) {
 		alert(e.message)
@@ -35,11 +35,12 @@ function* onAddNegotation({ payload }) {
 		formData.append('customer_firstname', payload.firstName)
 		formData.append('customer_lastname', payload.client_lastName)
 		formData.append('customer_registrynumber', payload.register_first + payload.register_second + payload.register)
+		formData.append('customer_phone', payload.phone)
 		formData.append('description', payload.description)
 		formData.append('pre_payment_percentage', payload.pre_payment_percentage)
 		formData.append('loan_month', payload.loan_month)
 		formData.append('status', payload.statusName)
-		formData.append('products', payload.selected_products.map((product) => { return { product_id: product.products_id, quantity: product.quantity }}))
+		formData.append('products', JSON.stringify(payload.selected_products.map((product) => { return { product_id: product.products_id, price: product.products_price, quantity: product.quantity }})))
 		formData.append('city_id', payload.city_id)
 		formData.append('district_id', payload.district_id)
 		formData.append('khoroo_id', payload.khoroo_id)

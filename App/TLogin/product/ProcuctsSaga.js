@@ -6,9 +6,9 @@ import { getAuthenticationToken } from '../../Services/storage'
 function* onSaveFirebaseToken({ payload }) {
 	try {
 		let token = yield getAuthenticationToken()
-		let res = yield request(token).post(`toilet/api/user/firebase`, {
-			firebase_token: payload
-		})
+		let form = new FormData();
+		form.append('firebase_token', payload);
+		let res = yield request(token).post(`toilet/api/user/firebase`, form)
 	} catch(e) {
 		//alert(e.message)
 	}
