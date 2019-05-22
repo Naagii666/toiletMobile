@@ -264,8 +264,8 @@ const PrimaryNav = createStackNavigator({
 }, {
   // Default config for all screens
   // headerMode: 'none',
-  //initialRouteName: 'LaunchScreen',
   initialRouteName: 'LaunchScreen',
+  // initialRouteName: 'Dashboard',
   navigationOptions: {
     headerStyle: styles.header
   }

@@ -17,7 +17,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import Storage from 'react-native-storage';
 import { Images } from '../../Themes'
 import axios from 'axios'
-import { setAuthenticationToken } from '../../Services/storage'
+import { setAuthenticationToken, setCustomerPicture } from '../../Services/storage'
 import { setCustomerId } from '../../Services/storage'
 import Icon from 'react-native-vector-icons/Entypo'
 
@@ -44,8 +44,10 @@ class LoginForm extends Component {
     axios.post('http://124.158.124.60:8080/toilet/api/user/login',form)
       .then(response => {
         if(response.data.success) {
+          console.log(JSON.stringify(response.data.data));
           let token = response.data.data.auth_token.toString();
           let customers_id = response.data.data.customers_id.toString();
+          let customers_picture = response.data.data.picture;
 
           let userData = {
             name: response.data.data.name,
@@ -72,7 +74,9 @@ class LoginForm extends Component {
           });
 
           if(this.state.isLoggedIn) {
-            this.props.navigation.navigate('Dashboard')
+            this.props.navigation.navigate('Dashboard',{
+              url: customers_picture
+            })
           } else {
             Alert.alert("Алдаа", "Хэрэглэгчийн мэйл/нууц үг буруу байна!");
           }
