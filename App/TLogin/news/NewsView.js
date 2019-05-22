@@ -3,7 +3,7 @@ import {bindActionCreators} from 'redux'
 import CardView from 'react-native-cardview'
 
 import React from 'react'
-import { View, Text, FlatList, RefreshControl, TouchableHighlight , StatusBar} from 'react-native'
+import { View, Text, FlatList, RefreshControl, TouchableHighlight ,Image,StyleSheet, StatusBar} from 'react-native'
 import moment from 'moment'
 import { Row, H2, H3, H4,H5, Wrapper, Separator } from '../../Components'
 import { getMyComments } from './NewsActions'
@@ -28,16 +28,7 @@ class NewsView extends React.Component {
     let { news_name, news_date_added, news_description, news_slug, news_image } = item
 		const { navigate } = this.props.navigation
     return (
-			<CardView
-				style={{ flex: 1, margin:10, padding: 10}}
-				cardElevation={7}
-				cardMaxElevation={7}
-				cornerRadius={15}
-			>
-				<StatusBar
-					backgroundColor="#f9ac19"
-					barStyle="light-content"
-				/>
+			// <View style={{ marginHorizontal:10,paddingVertical:8, backgroundColor:"#fff"}}>
 				<TouchableHighlight
 					underlayColor={'transparent'}
 					onPress={ () => navigate('NewsDetial', {
@@ -48,16 +39,17 @@ class NewsView extends React.Component {
 						url: news_image,
 					}) }
 					>
-					<View style={{padding:5, flexDirection:'row'}}>
-						<Icon name='mail' size={50} color='#f9ac19' />
-						<View style={{paddingLeft: 10,justifyContent:'center'}}>
-							<Text style={{fontWeight:'bold',color:'black'}}> { news_slug } </Text>
-							<H4> { news_name } </H4>
-							<Text style={{fontSize:10,paddingTop:10 ,color:'blue'}}> { moment(news_date_added).format('YYYY-mm-DD hh:mm') } </Text>
+					<View style={styles.rowContainer}>
+					<Image style={styles.thumb} source={{ uri: 'http://124.158.124.60:8080/toilet/'+news_image+'' }} />
+						<View style={styles.textContainer}>
+						<Text style={styles.newsName} numberOfLines={1}>{ news_name }</Text>
+							<H3></H3>
+						<Text style={styles.title} numberOfLines={1}>{ moment(news_date_added).format('YYYY-MM-DD hh:mm') }</Text>
+						
 						</View>
 					</View>
 				</TouchableHighlight>
-			</CardView>
+				// </View>
     )
   }
 
@@ -67,7 +59,7 @@ class NewsView extends React.Component {
 
 		return (
 
-			<Wrapper padding={10}>
+			<Wrapper >
 				<FlatList
 					refreshControl={
 						<RefreshControl
@@ -83,7 +75,7 @@ class NewsView extends React.Component {
 					//data={[]}
           renderItem={this.CommentItem.bind(this)}
 					removeClippedSubviews={false}
-					// ItemSeparatorComponent={Separator}
+					ItemSeparatorComponent={Separator}
 					ListEmptyComponent={this._renderEmpty}
 				/>
 			</Wrapper>
@@ -103,3 +95,27 @@ export default connect(
      }
    }
 )(NewsView)
+
+const styles = StyleSheet.create({
+  thumb: {
+    width: 80,
+    height: 80,
+    marginRight: 10
+	},
+	textContainer: {
+    flex: 1
+	},
+	rowContainer: {
+    flexDirection: 'row',
+    padding: 10
+	},
+	newsName: {
+    fontSize: 18,
+    // fontWeight: 'bold',
+    color: 'black'
+	},
+	title: {
+    fontSize: 14,
+    color: '#656565'
+  },
+});
