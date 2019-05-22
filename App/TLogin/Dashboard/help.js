@@ -1,13 +1,11 @@
 import React, { Component } from 'react'
 import { 
-    Alert,
-    ScrollView, 
+    Alert, 
     Text, 
     Image, 
     View,
     AsyncStorage,
     TouchableOpacity,
-    TouchableHighlight,
     StatusBar,
     WebView,
   } from 'react-native'
@@ -22,6 +20,7 @@ class help extends Component {
         <View>
           <WebView
             style={{ height:300, width:290 }}
+            // style={{ height:300, width:290 }}
             javaScriptEnabled={true}
             source={{ html: "<html><body><iframe src='https://www.youtube.com/embed/03DskGP1Ct0' frameborder='0' allowfullscreen></iframe></body></html>" }}
           />
