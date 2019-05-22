@@ -12,6 +12,7 @@ import NewNegotation from '../TLogin/negotation/NewNegotation'
 import ProductsView from '../TLogin/product/ProductsView'
 import NegotationView from '../TLogin/negotation/NegotationView'
 import AddNegotation from '../TLogin/negotation/AddNegotation'
+import EditNegotiation from '../TLogin/negotation/EditNegotiation'
 import Login from '../TLogin/LoginScreen/LoginForm'
 import Register from '../TLogin/LoginScreen/Register'
 import Dashboard from '../TLogin/Dashboard/Dashboard'
@@ -78,6 +79,20 @@ const PrimaryNav = createStackNavigator({
         color: 'white'
       },
       headerTintColor: 'white'
+    },
+  },
+  EditNegotiation: { screen: EditNegotiation,
+    navigationOptions: {
+    headerTitle: 'Хэлцэл засварлах',
+    headerStyle:{
+      backgroundColor: '#f9ac19',
+      color: 'white',
+      size:10
+    },
+    headerTitleStyle:{
+      color: 'white'
+    },
+    headerTintColor: 'white'
     },
   },
   AddNegotation: { screen: AddNegotation,

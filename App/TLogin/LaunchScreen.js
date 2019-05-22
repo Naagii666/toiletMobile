@@ -21,14 +21,16 @@ import { getAuthenticationToken } from '../Services/storage'
 export default class LaunchScreen extends React.Component {
   componentDidMount() {
 
-    let token = getAuthenticationToken();
-    
-    if(token) {
-      return this.props.navigation.navigate('Dashboard')
-    }
+    getAuthenticationToken()
+    .then(token => {
+        //alert(token)
 
-    this.props.navigation.navigate('MainScreen')
+        if(token) {
+          return this.props.navigation.navigate('Dashboard')
+        }
 
+        this.props.navigation.navigate('MainScreen')
+    })    
   }
 
   render () {

@@ -27,6 +27,46 @@ function* getFacebookComments() {
 		})
 	}
 }
+
+function* onEditNegotation({ payload }) {
+	try {
+		let token = yield getAuthenticationToken()
+
+		var formData = new FormData();
+		formData.append('description', payload.description)
+		formData.append('pre_payment_percentage', payload.pre_payment_percentage)
+		formData.append('loan_month', payload.loan_month)
+		formData.append('status', payload.statusName)
+
+		//let params = queryString.parse(payload)
+		let res = yield request(token).post(`toilet/api/negotations/${payload.negotiation_id}`, formData)
+		
+		if(!res.data.success) {
+			return yield put({
+				type: types.ON_EDIT_NEGOTATION_FAILED
+			})
+		}
+
+		yield put({
+			type: types.ON_EDIT_NEGOTATION_SUCCESS,
+			payload: res.data
+		})
+
+		yield put({
+			type: types.GET_MY_COMMENTS
+		})
+
+		yield put(NavigationActions.back())
+		yield put(NavigationActions.back())
+	 } catch(e) {
+		// alert(e.message)
+		alert(e.message)
+		yield put({
+			type: types.ON_EDIT_NEGOTATION_FAILED
+		})
+	 }
+}
+
 function* onAddNegotation({ payload }) {
 	 try {
 		let token = yield getAuthenticationToken()
@@ -116,10 +156,15 @@ function* watchAddNegotation() {
 	yield takeEvery(types.ON_ADD_NEGOTATION, onAddNegotation)
 }
 
+function* watchEditNegotation() {
+	yield takeEvery(types.ON_EDIT_NEGOTATION, onEditNegotation)
+}
+
 export default function *root() {
   yield all([
     fork(watchGetMyComments),
 		fork(watchGetFacebookComments),
 		fork(watchAddNegotation),
+		fork(watchEditNegotation),
   ])
 }

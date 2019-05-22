@@ -6,7 +6,7 @@ import React from 'react'
 import { View, Text, FlatList, RefreshControl, TouchableHighlight, StyleSheet, Alert, StatusBar } from 'react-native'
 import moment from 'moment'
 import { Row, H2, H3, H4, Wrapper, Separator } from '../../Components'
-import { getMyComments } from './NegotationActions'
+import { getMyComments, onSetSelectedNegotiation } from './NegotationActions'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import NewNegotation from './NewNegotation'
 
@@ -63,21 +63,24 @@ class NegotationView extends React.Component {
     
     const { navigate } = this.props.navigation
     return (
-      <TouchableHighlight underlayColor={'#f2f2f2'}  onPress={ () => navigate('NegotationDetial',{
-        first_name: first_name,
-        last_name: last_name,
-        registry_number: registry_number,
-        status: Status(status),
-        phone: phone,
-        date: date,
-        name: name,
-        city_name: city_name,
-        district_name: district_name,
-        khoroo_name: khoroo_name,
-        products_name: products_name,
-        products_image: products_image,
-        total_price: total_price,
-      }) } >
+      <TouchableHighlight underlayColor={'#f2f2f2'}  onPress={() => {
+        this.props.onSetSelectedNegotiation(item)
+        navigate('NegotationDetial',{
+          first_name: first_name,
+          last_name: last_name,
+          registry_number: registry_number,
+          status: Status(status),
+          phone: phone,
+          date: date,
+          name: name,
+          city_name: city_name,
+          district_name: district_name,
+          khoroo_name: khoroo_name,
+          products_name: products_name,
+          products_image: products_image,
+          total_price: total_price,
+        }) }}
+      >
         <View style={{ paddingHorizontal: 10, }}>
           <View style={{flexDirection: 'row', flex:1}}>
             <Icon name='circle' size={60} color={Color(status)} style={{
@@ -159,6 +162,7 @@ export default connect(
   }),
   dispatch => {
     return {
+      onSetSelectedNegotiation: bindActionCreators(onSetSelectedNegotiation, dispatch),
       getMyComments: bindActionCreators(getMyComments, dispatch),
       // navigate: this.props.navigation
     }
