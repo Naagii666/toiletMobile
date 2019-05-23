@@ -48,6 +48,7 @@ class LoginForm extends Component {
           let token = response.data.data.auth_token.toString();
           let customers_id = response.data.data.customers_id.toString();
           let customers_picture = response.data.data.picture;
+          let customer_name = response.data.data.user_name;
 
           let userData = {
             name: response.data.data.name,
@@ -55,7 +56,6 @@ class LoginForm extends Component {
             auth_token: token,
             customers_id: customers_id
           }
-          // alert(JSON.stringify(userData));
 
           console.log('login userData ' + JSON.stringify(userData))
           // alert(userData);
@@ -75,7 +75,8 @@ class LoginForm extends Component {
 
           if(this.state.isLoggedIn) {
             this.props.navigation.navigate('Dashboard',{
-              url: customers_picture
+              url: customers_picture,
+              name: customer_name
             })
           } else {
             Alert.alert("Алдаа", "Хэрэглэгчийн мэйл/нууц үг буруу байна!");
