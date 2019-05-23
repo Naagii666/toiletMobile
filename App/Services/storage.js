@@ -80,3 +80,21 @@ export async function deletePicture() {
 		
 	}
 }
+
+export async function setCustomerPicture(customers_picture) {
+	try {
+		await AsyncStorage.setItem(USER_PICTURE, customers_picture)
+	} catch (e) {
+		//saving error
+	}
+}
+
+
+export async function getCustomerPicture() {
+	try {
+	    const customers_picture = await AsyncStorage.getItem(USER_PICTURE)
+	    return customers_picture
+	} catch(e) {
+	    // error reading value
+	}
+}

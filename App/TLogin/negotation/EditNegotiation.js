@@ -171,12 +171,20 @@ const statusData = [{
     }, {
       value: 'Цуцлагдсан',
     }];
+
+    let alphapet = ['а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я'].map((cur, index) => { return { key: index, label: cur.toUpperCase() }})
+ 
+
 //const isValidate = firstName.length > 0 && client_lastName > 0 && register > 0 && client_lastName > 0;
 class EditNegotation  extends React.Component {
   constructor(props) {
     super(props);
     console.log(props.negotiation)
     this.state = {
+      firstName  : '',
+      client_lastName: '',
+      phone: '',
+      register: '',
       negotiation_id: props.negotiation.negotiation_id,
       statusName: props.negotiation.status,
       selected_products: [],
@@ -185,6 +193,7 @@ class EditNegotation  extends React.Component {
       pre_payment_percentage: props.negotiation.pre_payment_percentage,
       loan_month: props.negotiation.loan_month,
       description: props.negotiation.description,
+      
     }
   }
   componentDidMount() {
@@ -271,8 +280,11 @@ class EditNegotation  extends React.Component {
   render() {
     const { comments, loading } = this.props
     const { navigate } = this.props.navigation
-
-    let { selected_products, statusName, description, pre_payment_percentage, loan_month, city_id, district_id } = this.state
+    const { navigation } = this.props;
+    const first_name = firstName;
+    const last_name = navigation.getParam('last_name');
+    const registry_number = navigation.getParam('registry_number');
+    let { selected_products, statusName, description, pre_payment_percentage, loan_month, city_id, district_id, firstName, client_lastName } = this.state
 
     console.log(statusName)
 
@@ -282,8 +294,22 @@ class EditNegotation  extends React.Component {
           <KeyboardAwareScrollView contentContainerStyle={styles.container2}
           resetScrollToCoords={{x:1,y:1}}
           scrollEnabled={false}>
+            <View style={{ marginBottom: 10, }}>
+                <Text>
+                  1. Харилцагчийн мэдээлэл
+                </Text>
+              </View>
+            <View style={styles.rowText}>
+              <Text style={{color:'#f9ac19',fontSize:16}}>Нэр: {first_name}</Text>
+            </View>
+            <View style={styles.rowText}>
+              <Text style={{textAlign: 'right',color:'#f9ac19',fontSize:16}}>Овог: {last_name}</Text>
+            </View>
+            <View style={styles.rowText}>
+              <Text style={{textAlign: 'right',color:'#f9ac19',fontSize:16}}>Регистер: {registry_number}</Text>
+            </View>
                 {/* Bvteegdhvvn */}
-            {/*<View style={{ padding: 20, backgroundColor: colors.gray }}>
+            <View style={{ padding: 20, backgroundColor: colors.gray }}>
               <View style={{ marginBottom: 10, }}>
                 <Text>
                   2. Бүтээгдэхүүний мэдээлэл
@@ -304,7 +330,7 @@ class EditNegotation  extends React.Component {
                     </View>
                 </View>
               </TouchableOpacity>
-            </View>*/}
+            </View>
 
             <View style={{ padding: 20, backgroundColor: colors.gray }}> 
               {/* tolow */}
@@ -330,13 +356,12 @@ class EditNegotation  extends React.Component {
                   rippleCentered={true}
                   inputContainerStyle={{ borderBottomColor: 'transparent', marginLeft:16, }}
                   label='Хэлцэлийн төлөв'
-                  value={statusData[statusName - 1].value}
+                  value={statusData[statusName].value}
                   data={statusData}
               />
               <View style={{ flexDirection: 'row'}}>
                 <View style={[styles.inputContainer, { flex: 1, }]}>    
-                    <TextInput 
-                        style={styles.inputs}
+                    <TextInput style={styles.inputs}
                         placeholder="Урьдчилгаа хувь"
                         keyboardType="numeric"
                         underlineColorAndroid='transparent'

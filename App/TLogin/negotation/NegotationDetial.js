@@ -10,12 +10,14 @@ import {
   ScrollView
 } from 'react-native'
 import moment from 'moment'
+import { getMyComments, onSetSelectedNegotiation } from './NegotationActions'
 
 class NegotationDetial extends Component{
 
   _alert(){
     Alert.alert("Амжилттай", "Таны хүсэлтийг хүлээн авлаа");
   }
+
 
   render() {
     const { navigation } = this.props;
@@ -33,7 +35,27 @@ class NegotationDetial extends Component{
     const products_name = navigation.getParam('products_name', 'some default value');
     const products_image = navigation.getParam('products_image', 'some default value');
     const regex = /(<([^>]+)>)/ig;
+
+
+    // CommentItem ({ item }){
+    //   let { 
+    //     first_name, last_name, registry_number, status, date, phone, name,
+    //     city_name, district_name, khoroo_name, products_name, products_image, total_price
+    //   } = item
+    let item={first_name, last_name, registry_number}
+      const { navigate } = this.props.navigation
+    // sendData = () => {
+    //   this.props.onSetSelectedNegotiation(item)
+    //   navigate('EditNegotiation',{
+    //     first_name: first_name,
+    //     last_name: last_name,
+    //     registry_number: registry_number,
+    //   })
+    // }
+    
+    
     return(
+      
        <ScrollView>
         <View style={styles.container}>
           <View>
@@ -67,6 +89,14 @@ class NegotationDetial extends Component{
         </View>
       </ScrollView>
     );
+  }
+}
+
+dispatch => {
+  return {
+    onSetSelectedNegotiation: bindActionCreators(onSetSelectedNegotiation, dispatch),
+    getMyComments: bindActionCreators(getMyComments, dispatch),
+    // navigate: this.props.navigation
   }
 }
 

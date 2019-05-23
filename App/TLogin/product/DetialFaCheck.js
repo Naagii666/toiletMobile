@@ -48,11 +48,6 @@ class DetialFaCheck extends Component{
           <View style={{alignItems:'center'}}>
             <Text style={styles.definition}>{definition.replace(regex,'')}</Text>
           </View>
-          <View>
-            <TouchableOpacity onPress={ () => this._alert() } style={styles.button}>
-              <Text> Худалдан авах хүсэлт илгээх </Text>
-            </TouchableOpacity>
-          </View>
         </View>
         </ScrollView>
     );

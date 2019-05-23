@@ -19,7 +19,7 @@ import { Images } from '../../Themes/'
 import CardView from 'react-native-cardview'
 import Icon from 'react-native-vector-icons/FontAwesome'
 //import { deleteAuthenticationToken } from '../../Services/storage'
-import { getAuthenticationToken, deleteAuthenticationToken } from '../../Services/storage'
+import { getAuthenticationToken, deleteAuthenticationToken, getCustomerPicture } from '../../Services/storage'
 import { getCustomerId, deleteCustomerId } from '../../Services/storage'
 const storage = new Storage({
   size: 1000,
@@ -51,24 +51,15 @@ class Dashboard extends Component {
     this.state = {
       name: '',
       email: '',
-      // timestamp: '',
       auth_token: '',
+      url: ''
     }
   }
 
   componentDidMount = () => {
 
-    getAuthenticationToken().then(response => {
-      let resJson = JSON.parse(response);
-      this.setState({
-        name: resJson.name,
-        email: resJson.email,
-        auth_token: resJson.token,
-      })
-    })
-
     this.props.navigation.setParams({ 
-      onLogout: this.onLogout
+      onLogout: this.onLogout,
     });
   }
 
@@ -94,6 +85,12 @@ class Dashboard extends Component {
   }
 
   static navigationOptions = ({ navigation }) => {
+    
+    // const { navigation } = this.props;
+    let url = navigation.getParam('url', 'some default value')
+
+    let BASE_URL = 'http://124.158.124.60:8080/toilet/'+url;
+    
     return {
       headerTitle: (
         <View style={{
@@ -113,7 +110,7 @@ class Dashboard extends Component {
                 marginRight: 20,
                 backgroundColor:'white'
               }}
-              source={{uri: 'https://png.pngtree.com/png_detail/20180930/cute-girl-png-clipart_849052.png'}}
+              source={{uri: BASE_URL}}
             />
           </View>
           <View style={{flex: 1 ,justifyContent: 'center'}}>
