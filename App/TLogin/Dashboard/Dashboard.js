@@ -34,9 +34,6 @@ const{
   height:SCREEN_HEIGHT,
 }=Dimensions.get('window');
 
-
-
-
 function fitSize(){
   if(SCREEN_WIDTH<500){
     return 70;
@@ -48,8 +45,11 @@ class Dashboard extends Component {
 
   constructor(props){
     super(props);
+    // const { navigation } = this.props;
+
+    // console.log('KAss' + props.navigation.getParam('url', 'some default value'));
     this.state = {
-      name: '',
+      name: 'Dulguun',
       email: '',
       auth_token: '',
       url: ''
@@ -57,7 +57,6 @@ class Dashboard extends Component {
   }
 
   componentDidMount = () => {
-
     this.props.navigation.setParams({ 
       onLogout: this.onLogout,
     });
@@ -85,11 +84,12 @@ class Dashboard extends Component {
   }
 
   static navigationOptions = ({ navigation }) => {
-    
+
     // const { navigation } = this.props;
     let url = navigation.getParam('url', 'some default value')
+    let name = navigation.getParam('name', 'some default value')
 
-    let BASE_URL = 'http://124.158.124.60:8080/toilet/'+url;
+    let BASE_URL = 'http://124.158.124.60:8080/toilet/' + url;
     
     return {
       headerTitle: (
@@ -114,10 +114,9 @@ class Dashboard extends Component {
             />
           </View>
           <View style={{flex: 1 ,justifyContent: 'center'}}>
-            {/* <Text h2>{ this.state.user_name }</Text> */}
-            <Text style={{ fontSize: 17, color: '#fff' } } adjustFontSizeToFit  numberOfLines={1}> Менежер </Text>
-          </View>
-          
+            <Text style={{ fontSize: 19 } }>{ name }</Text>
+            <Text style={{ fontSize: 12, color: '#fff' } } adjustFontSizeToFit  numberOfLines={1}> Менежер </Text>
+          </View>    
          
           <View style={{ alignItems: 'flex-end' }}>
             <TouchableOpacity 
@@ -145,10 +144,9 @@ class Dashboard extends Component {
   render () {
     return (
       <CardView
-        style={{ flex: 1, margin: 15,height:hp('100%'),width:wp('90%') }}
+        style={{ flex: 1, margin: 1,height:hp('100%'),width:wp('100%') }}
         cardElevation={7}
         cardMaxElevation={7}
-        cornerRadius={20}
       >
         <StatusBar
           backgroundColor="#f9ac19"
