@@ -1,7 +1,7 @@
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import CardView from 'react-native-cardview';
-
+import _ from 'lodash'
 import React from 'react'
 import { View, Text, FlatList, RefreshControl, TouchableHighlight, StyleSheet, Alert, StatusBar } from 'react-native'
 import moment from 'moment'
@@ -32,7 +32,7 @@ function Status(status){
     case 2:
       return 'Хүлээгдэж байгаа';  
     case 3:
-      return 'Үрэглжилж буй';
+      return 'Үргэлжилж буй';
     case 4:
         return 'Дууссан';
     default:
@@ -55,31 +55,22 @@ class NegotationView extends React.Component {
 	}
 
 
-  CommentItem ({ item }){
-    let { 
-      first_name, last_name, registry_number, status, date, phone, name,
-      city_name, district_name, khoroo_name, products_name, products_image, total_price
-    } = item
+  CommentItem ({ item }) {
+    // let { 
+    //   first_name, last_name, registry_number, status, date, phone, name,
+    //   city_name, district_name, khoroo_name, products_name, products_image, total_price
+    // } = item
+
+    let { created_at, status } = item
+    let { first_name, last_name, registry_number, phone } = item.customer
+    //alert(created_at)
     
     const { navigate } = this.props.navigation
     return (
       <TouchableHighlight underlayColor={'#f2f2f2'}  onPress={() => {
         this.props.onSetSelectedNegotiation(item)
-        navigate('NegotationDetial',{
-          first_name: first_name,
-          last_name: last_name,
-          registry_number: registry_number,
-          status: Status(status),
-          phone: phone,
-          date: date,
-          name: name,
-          city_name: city_name,
-          district_name: district_name,
-          khoroo_name: khoroo_name,
-          products_name: products_name,
-          products_image: products_image,
-          total_price: total_price,
-        }) }}
+          navigate('NegotationDetial', { item }) 
+        }}
       >
         <View style={{ paddingHorizontal: 10, }}>
           <View style={{flexDirection: 'row', flex:1}}>
@@ -89,22 +80,17 @@ class NegotationView extends React.Component {
                 shadowRadius: 5,
                 textShadowOffset:{width: 1,height:5}
             }}/>
-
-            <View style={{paddingLeft: 10, paddingTop:5,flex:1,flexDirection: 'row', justifyContent:'space-between',}}>
-          
-              <H3>
-                Хэлцэл
-              </H3>
-              <H3>
-                {moment(date).format('YYYY-MM-DD')}
-              </H3>
+            <View style={{ flex: 1, paddingHorizontal: 10, justifyContent: 'center' }}>
+              <Row>
+                  <H3> { first_name } </H3>
+                  <H3> { last_name } </H3>
+              </Row>
+              <Text> { Status(status) } </Text>
             </View>
-            <View style={{flexWrap: 'wrap',alignItems:'center',justifyContent:'center',flexDirection: 'row',flex:1}}>
-            <Row>
-                <H3> { first_name } </H3>
-                <H3> { last_name } </H3>
-            </Row>
-                <Text> { Status(status) } </Text>
+            <View style={{ paddingRight: 10, }}>
+              <H3>
+                {moment(created_at).format('YYYY-MM-DD')}
+              </H3>
             </View>
           </View>
         </View>
@@ -112,7 +98,7 @@ class NegotationView extends React.Component {
     )
   }
 
-  _newNegotation(){
+  _newNegotation() {
     this.props.navigation.navigate('NewNegotation');
   }
 
@@ -142,7 +128,7 @@ class NegotationView extends React.Component {
 					removeClippedSubviews={false}
 					ItemSeparatorComponent={Separator}
           ListEmptyComponent={this._renderEmpty}
-          keyExtractor={item => item.register}
+          keyExtractor={(item, index) => String(index)}
 				/>
         <View>
           <TouchableHighlight onPress={ () => navigate('AddNegotation') } style={styles.button}>

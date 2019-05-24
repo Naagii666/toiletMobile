@@ -166,6 +166,7 @@ class AddNegotation  extends React.Component {
     this.state = {
       firstName  : '',
       client_lastName: '',
+      is_company: 1,
       phone: '',
       register_first: '',
       register_second: '',
@@ -324,7 +325,7 @@ class AddNegotation  extends React.Component {
     // }];
     //let productsTempate = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((cur) => { value: cur })
 
-    let { selected_products, statusName, pre_payment_percentage, loan_month, city_id, district_id } = this.state
+    let { selected_products, statusName, pre_payment_percentage, loan_month, city_id, district_id, is_company } = this.state
 
     let index = 0;
 
@@ -363,6 +364,13 @@ class AddNegotation  extends React.Component {
       })
     }
     //alert(JSON.stringify(this.props.locations.cities[0]))
+    let companyStatus = [{
+      label: 'Иргэн',
+      id: 1,
+    }, {
+      label: 'Байгууллага',
+      id: 2,
+    }]
 
     return (
       <Wrapper>
@@ -376,20 +384,34 @@ class AddNegotation  extends React.Component {
                   1. Харилцагчийн мэдээлэл
                 </Text>
               </View>
+
+              <View style={{ paddingBottom: 20, }}>
+                <ModalSelector
+                    data={companyStatus}
+                    cancelText={'Буцах'}
+                    initValue={companyStatus[0].label}
+                    onChange={(option)=> { this.setState({ is_company: option.id }) }} />
+              </View>
               
               <View style={{ flexDirection: 'row', }}>
-                <ModalSelector
-                    data={alphapet}
-                    cancelText={'Буцах'}
-                    initValue="-"
-                    onChange={(option)=> { this.setState({ register_first: option.label }) }} />
-                <View style={{ width: 10, }}/>
-                <ModalSelector
-                    data={alphapet}
-                    cancelText={'Буцах'}
-                    initValue="-"
-                    onChange={(option)=> { this.setState({ register_second: option.label }) }} />
-                <View style={[styles.inputContainer, { flex: 1, marginLeft: 10, }]}>
+                {
+                  is_company == 1 ? [
+                    <ModalSelector
+                        data={alphapet}
+                        cancelText={'Буцах'}
+                        initValue="-"
+                        onChange={(option)=> { this.setState({ register_first: option.label }) }} />,
+                    <View style={{ width: 10, }}/>,
+                    <ModalSelector
+                        data={alphapet}
+                        cancelText={'Буцах'}
+                        initValue="-"
+                        onChange={(option)=> { this.setState({ register_second: option.label }) }} />,
+                    <View style={{ width: 20, }} />
+                  ] : null
+                }
+                
+                <View style={[styles.inputContainer, { flex: 1 }]}>
                     <TextInput 
                         style={styles.inputs}
                         keyboardType='numeric'
@@ -410,15 +432,20 @@ class AddNegotation  extends React.Component {
                         onChangeText={firstName => this.setState({firstName})}
                     />
               </View>
-              <View style={[styles.inputContainer, ]}>
-                    <TextInput style={styles.inputs}
-                        placeholder="Овог"
-                        keyboardType="default"
-                        value={this.state.client_lastName}
-                        underlineColorAndroid='transparent'
-                        onChangeText={client_lastName => this.setState({client_lastName})}
-                    />
-              </View>
+              {
+                  is_company == 1 && (
+                    <View style={[styles.inputContainer, ]}>
+                          <TextInput style={styles.inputs}
+                              placeholder="Овог"
+                              keyboardType="default"
+                              value={this.state.client_lastName}
+                              underlineColorAndroid='transparent'
+                              onChangeText={client_lastName => this.setState({client_lastName})}
+                          />
+                    </View>
+                  )
+              }
+              
               <View style={[styles.inputContainer, { marginBottom: 0, }]}>
                     <TextInput style={styles.inputs}
                         placeholder="Утас"
