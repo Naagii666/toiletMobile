@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import React from 'react'
 import { View, Text, FlatList, RefreshControl,TouchableHighlight,StyleSheet,Alert ,StatusBar} from 'react-native'
 import moment from 'moment'
-import { Row, H2, H3, H4, Wrapper, Separator } from '../../Components'
+import { Row, H2, H3, H4, Wrapper, Separator2 } from '../../Components'
 import { getMyComments } from './CommentActions'
 
 const CommentItem = ({ item, index }) => {
@@ -18,14 +18,15 @@ const CommentItem = ({ item, index }) => {
 				</View>
 				<View>
 				<Row justify='between' style={{ flex: 1, }}>
-				
 						<H4>
-						
 							<Text>Сэтгэгдэл</Text>
 						</H4>
-						<H4>
-							{moment(Date).format('YYYY-MM-DD')}
-						</H4>
+						<View  style={{justifyContent:'center'}}> 
+							<H4>
+								<Text>{moment(Date).format('YYYY-MM-DD')}</Text>
+							</H4>
+						</View>
+						
 					</Row>
 					<View style={{ paddingTop: 10, }}>
 						<H3>
@@ -63,6 +64,7 @@ class CommentView extends React.Component {
 		return (
 			<Wrapper padding={20}>
 				<FlatList
+					inverted
 					refreshControl={
 						<RefreshControl
 							refreshing={loading}
@@ -76,7 +78,7 @@ class CommentView extends React.Component {
 					//data={[]}
 					renderItem={CommentItem} 
 					removeClippedSubviews={false}
-					ItemSeparatorComponent={Separator}
+					ItemSeparatorComponent={Separator2}
 					ListEmptyComponent={this._renderEmpty}
 				/>
 				<View>
