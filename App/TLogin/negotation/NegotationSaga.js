@@ -37,6 +37,7 @@ function* onEditNegotation({ payload }) {
 		formData.append('pre_payment_percentage', payload.pre_payment_percentage)
 		formData.append('loan_month', payload.loan_month)
 		formData.append('status', payload.statusName)
+		formData.append('products', JSON.stringify(payload.selected_products.map((product) => { return { product_id: product.products_id, price: product.products_price, quantity: product.quantity }})))
 
 		//let params = queryString.parse(payload)
 		let res = yield request(token).post(`toilet/api/negotations/${payload.negotiation_id}`, formData)
