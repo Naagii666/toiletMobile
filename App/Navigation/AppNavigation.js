@@ -24,6 +24,7 @@ import Help from '../TLogin/Dashboard/help'
 import launchStyle from '../TLogin/Styles/LaunchScreenStyles'
 
 import styles from './Styles/NavigationStyles'
+import profile from '../TLogin/Profile/Profile'
 
 // Manifest of possible screens
 const PrimaryNav = createStackNavigator({
@@ -261,7 +262,21 @@ const PrimaryNav = createStackNavigator({
       gesturesEnabled: false,
     },
   },
-}, {
+  profile: {
+    screen: profile,
+    navigationOptions: {
+      headerTitle: 'Хувийн мэдээлэл',
+      headerStyle:{
+        backgroundColor: "#f9ac19",
+      },
+      title: '',
+      // headerLeft: null,
+      headerTintColor: 'white',
+      gesturesEnabled: false,
+    },
+  },
+}, 
+{
   // Default config for all screens
   // headerMode: 'none',
   initialRouteName: 'LaunchScreen',

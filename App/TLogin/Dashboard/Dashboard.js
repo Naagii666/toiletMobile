@@ -99,24 +99,32 @@ class Dashboard extends Component {
           justifyContent: 'space-between',
           flexDirection: 'row'
         }}>
-          <View style={{ justifyContent: 'center' }}>
-            <Image 
-              style={{
-                width:60,
-                height:60,
-                alignItems:'center',
-                borderRadius:20,
-                marginLeft:20,
-                marginRight: 20,
-                backgroundColor:'white'
-              }}
-              source={{uri: BASE_URL}}
-            />
-          </View>
-          <View style={{flex: 1 ,justifyContent: 'center'}}>
-            <Text style={{ fontSize: 19 } }>{ name }</Text>
-            <Text style={{ fontSize: 12, color: '#fff' } } adjustFontSizeToFit  numberOfLines={1}> Менежер </Text>
-          </View>    
+          <TouchableOpacity 
+              activeOpacity={0.6}
+              onPress={navigation.getParam('profile')}
+            >
+            <View style={{ justifyContent: 'center' }}>
+              
+              <Image 
+                style={{
+                  width:60,
+                  height:60,
+                  alignItems:'center',
+                  borderRadius:20,
+                  marginLeft:20,
+                  marginRight: 20,
+                  backgroundColor:'white'
+                }}
+                source={{uri: BASE_URL}}
+              />
+
+            </View>
+            </TouchableOpacity>
+            <View style={{flex: 1 ,justifyContent: 'center'}}>
+              <Text style={{ fontSize: 19 } }>{ name }</Text>
+              <Text style={{ fontSize: 12, color: '#fff' } } adjustFontSizeToFit  numberOfLines={1}> Менежер </Text>
+            </View> 
+          
          
           <View style={{ alignItems: 'flex-end' }}>
             <TouchableOpacity 
