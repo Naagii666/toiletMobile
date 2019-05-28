@@ -21,7 +21,7 @@ class help extends Component {
       </View>
         <View>
           <WebView
-            style={{ height:100, width:290 }}
+            style={{width:290 }}
             javaScriptEnabled={true}
             // source={{uri: 'https://www.youtube.com/embed/03DskGP1Ct0'}}
             source={{ html: "<html><body><iframe src='https://www.youtube.com/embed/03DskGP1Ct0' frameborder='0' allowfullscreen></iframe></body></html>" }}
