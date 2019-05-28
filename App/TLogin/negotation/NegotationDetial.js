@@ -7,10 +7,12 @@ import {
   TouchableOpacity, 
   StyleSheet,
   Alert,
-  ScrollView
+  ScrollView,
+  Linking
 } from 'react-native'
 import moment from 'moment'
 import { getMyComments, onSetSelectedNegotiation } from './NegotationActions'
+import { Table, Row, Rows } from 'react-native-table-component';
 
 class NegotationDetial extends Component{
 
@@ -18,77 +20,117 @@ class NegotationDetial extends Component{
     Alert.alert("Амжилттай", "Таны хүсэлтийг хүлээн авлаа");
   }
 
+  Status(status){
+    switch(status){
+      case 1:
+        return 'Шинэ';
+      case 2:
+        return 'Хүлээгдэж байгаа';  
+      case 3:
+        return 'Үргэлжилж буй';
+      case 4:
+          return 'Дууссан';
+      default:
+        return 'Цуцлагдсан';  
+    }
+  }
+
 
   render() {
     const { navigation } = this.props;
-    const first_name = navigation.getParam('first_name', 'some default value');
-    const last_name = navigation.getParam('last_name', 'some default value');
-    const registry_number = navigation.getParam('registry_number', 'some default value');
-    const status = navigation.getParam('status', 'some default value');
-    const phone = navigation.getParam('phone', 'some default value');
-    const date = navigation.getParam('date', 'some default value');
-    const name = navigation.getParam('name', 'some default value');
-    const city_name = navigation.getParam('city_name', 'some default value');
-    const district_name = navigation.getParam('district_name', 'some default value');
-    const khoroo_name = navigation.getParam('khoroo_name', 'some default value');
-    const total_price = navigation.getParam('total_price', 'NO-ID');
+    let item = navigation.getParam('item')
+    const { first_name, last_name, registry_number, phone, is_company } = item.customer
+    const { status, created_at, city, district, khoroo, total_price, products, sheets, slug, customer_approve, loan_month, pre_payment_percentage, description } = item
+
     const products_name = navigation.getParam('products_name', 'some default value');
     const products_image = navigation.getParam('products_image', 'some default value');
     const regex = /(<([^>]+)>)/ig;
 
+    let tableHead = ['Огноо', 'Төлөх дүн']
+    let tableData = sheets.map((sheet) => [sheet.payment_day, sheet.amount_sheet])
 
-    // CommentItem ({ item }){
-    //   let { 
-    //     first_name, last_name, registry_number, status, date, phone, name,
-    //     city_name, district_name, khoroo_name, products_name, products_image, total_price
-    //   } = item
-    let item={first_name, last_name, registry_number}
-      const { navigate } = this.props.navigation
-    // sendData = () => {
-    //   this.props.onSetSelectedNegotiation(item)
-    //   navigate('EditNegotiation',{
-    //     first_name: first_name,
-    //     last_name: last_name,
-    //     registry_number: registry_number,
-    //   })
-    // }
-    
-    
+    let productTableHead = ['Нэр', 'Тоо', 'Нэгжийн үнэ']
+    let productTableData = products.map((product) => [product.product.products_name, product.quantity, product.product_price])    
+    const contract_url = is_company == 1 ? 'contract_individual_form' : 'contract_entity_form'
+
+    ///contract_entity_form/?:slug
+///contract_individual_form/?:slug
+
     return(
-      
-       <ScrollView>
-        <View style={styles.container}>
-          <View>
-            <Text> Үүсгэсэн огноо:  { moment(date).format('YYYY-MM-DD hh:mm') }</Text>
-          </View>
-          <View style={styles.rowText}>
-            <Text style={{color:'#f9ac19',fontSize:16}}>Нэр: {first_name}</Text>
-            <View style={{flex: 1}}>
-              <Text style={{textAlign: 'right',color:'#f9ac19',fontSize:16}}>Регистер: {registry_number}</Text>
-              <Text style={{textAlign: 'right',color:'#f9ac19',fontSize:16}}>Утас: {phone}</Text>
+       <View style={{ flex: 1, }}>
+         <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
+          <View style={styles.container}>
+            <View style={{ paddingVertical: 2, }}>
+                <Text>Иргэн/Байгууллага: <Text style={{ fontWeight: 'bold'}}>{is_company == 1 ? 'Иргэн' : 'Байгууллага'}</Text></Text>
+            </View>
+            <View>
+              <Text>Үүсгэсэн огноо: <Text style={{ fontWeight: 'bold'}}>{ moment(created_at).format('YYYY-MM-DD hh:mm') }</Text></Text>
+            </View>
+            <View>
+              <View style={{ paddingVertical: 2, }}>
+                <Text>Нэр: <Text style={{ fontWeight: 'bold'}}>{first_name} {last_name}</Text></Text>
+              </View>
+              <Text>Регистер: <Text style={{ fontWeight: 'bold'}}>{registry_number}</Text></Text>
+              <View style={{ paddingVertical: 2, }}>
+                <Text>Утас: <Text style={{ fontWeight: 'bold'}}>{phone}</Text></Text>
+              </View>
+              <Text>Хаяг: {city ? city.name : ''}, {district ? district.name : ''}, {khoroo ? khoroo.name : ''} </Text>
+              <View style={{ paddingVertical: 2, }}>
+                <Text>Төлөв: <Text style={{ fontWeight: 'bold'}}>{this.Status(status)}</Text></Text>
+              </View>
+            </View>
+            <View style={{ backgroundColor: '#b5b5b5', height: 1, marginTop: 10, marginBottom: 10, }}/>
+            <View style={{ paddingVertical: 5, }}>
+              <Text>Бүтээгдэхүүний жагсаалт</Text>
+            </View>
+            <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+              <Row data={productTableHead} flexArr={[2, 1, 2]} style={styles.head} textStyle={styles.text}/>
+              <Rows data={productTableData} flexArr={[2, 1, 2]} textStyle={styles.text}/>
+            </Table>
+            <View style={{ alignItems: 'flex-end', paddingTop: 5, }}>
+                <Text>Нийт үнэ: <Text style={{ fontWeight: 'bold', fontSize: 17, }}>{total_price}</Text></Text>
+            </View>
+
+            <View style={{ backgroundColor: '#b5b5b5', height: 1, marginTop: 10, marginBottom: 10, }}/>
+
+            <View style={{ paddingVertical: 10, alignItems: 'flex-end' }}>
+                <View style={{ paddingVertical: 2 }}>
+                  <Text>Урьчилгаа хувь: <Text style={{ fontWeight: 'bold'}}>{pre_payment_percentage}%</Text></Text>
+                </View>
+                <Text>Зээлийн сар: <Text style={{ fontWeight: 'bold'}}>{loan_month}</Text></Text>
+            </View>
+
+            <View style={{ paddingVertical: 5, }}>
+              <Text>Төлбөрийн график</Text>
+            </View>
+            <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+              <Row data={tableHead} style={styles.head} textStyle={styles.text}/>
+              <Rows data={tableData} textStyle={styles.text}/>
+            </Table>
+
+            <View style={{ paddingVertical: 20, }}>
+              <Text>Хэлцэл зөвшөөрсөн эсэх: <Text style={{ fontWeight: 'bold'}}>{customer_approve == 1 ? 'Тийм' : 'Үгүй'}</Text></Text>
+            </View>
+
+            <View>
+              <Text>
+                Тайлбар: {description}
+              </Text>
             </View>
           </View>
-          <View>
-          <Text> Хаяг: {city_name}, {district_name}, {khoroo_name} </Text>
-            <View>
-                <Text style={{color:'#f9ac19',fontSize:16}}>Бүтээгдэхүүний нэр: {products_name}</Text>
-                <Text style={{color:'#f9ac19',fontSize:16}}>Үнэ: {total_price}</Text>
-             </View>
-            <Image 
-              style={{width: '100%', height:350, }}
-              source={{ uri: 'http://124.158.124.60:8080/toilet/'+products_image+'' }} />
-          </View>
-          <View style={{alignItems:'center'}}>
-            <Text> Төлөв - {status}</Text>
-          </View>
-          <View>
-            <TouchableOpacity onPress={() => navigation.navigate({ routeName: 'EditNegotiation'}) } style={styles.button}>
-              <Text> Засварлах </Text>
-            </TouchableOpacity>
-          </View>
+        </ScrollView>
+        <View style={{ paddingBottom: 10, paddingHorizontal: 10, flexDirection: 'row' }}>
+          <TouchableOpacity onPress={() => {
+            Linking.openURL(`http://124.158.124.60:8080/toilet/${contract_url}/${slug}`).catch((err) => console.error('An error occurred', err));
+          }} style={[styles.button, { flex: 1, }]}>
+            <Text>Нөхцөл харах</Text>
+          </TouchableOpacity>
+          <TouchableOpacity disabled={customer_approve == 1} onPress={() => navigation.navigate({ routeName: 'EditNegotiation'}) } style={[styles.button, { flex: 1, }, customer_approve == 1 ? { backgroundColor: '#b5b5b5'} : {}]}>
+            <Text>Засварлах</Text>
+          </TouchableOpacity>
         </View>
-      </ScrollView>
-    );
+      </View>
+    )
   }
 }
 
@@ -104,10 +146,8 @@ export default NegotationDetial
 
 const styles = StyleSheet.create({
   container:{
-    flex: 1,
-    margin:20,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
+    padding: 20,
+    paddingBottom: 10,
   },
   rowText:{
     flexDirection: 'row',
@@ -130,4 +170,6 @@ const styles = StyleSheet.create({
     borderRadius:10,
     alignContent: 'flex-end',
   },
+  head: { height: 40, backgroundColor: '#f1f8ff' },
+  text: { margin: 6 }
 });

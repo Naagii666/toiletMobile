@@ -20,11 +20,8 @@ import { getAuthenticationToken } from '../Services/storage'
 
 export default class LaunchScreen extends React.Component {
   componentDidMount() {
-
     getAuthenticationToken()
     .then(token => {
-        //alert(token)
-
         if(token) {
           return this.props.navigation.navigate('Dashboard')
         }

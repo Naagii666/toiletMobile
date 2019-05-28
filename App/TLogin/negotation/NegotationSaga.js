@@ -37,6 +37,7 @@ function* onEditNegotation({ payload }) {
 		formData.append('pre_payment_percentage', payload.pre_payment_percentage)
 		formData.append('loan_month', payload.loan_month)
 		formData.append('status', payload.statusName)
+		formData.append('products', JSON.stringify(payload.selected_products.map((product) => { return { product_id: product.products_id, price: product.products_price, quantity: product.quantity }})))
 
 		//let params = queryString.parse(payload)
 		let res = yield request(token).post(`toilet/api/negotations/${payload.negotiation_id}`, formData)
@@ -71,10 +72,12 @@ function* onAddNegotation({ payload }) {
 	 try {
 		let token = yield getAuthenticationToken()
 
+		let registry_number = payload.is_company == 1 ? (payload.register_first + payload.register_second + payload.register) : payload.register
+
 		var formData = new FormData();
 		formData.append('customer_firstname', payload.firstName)
 		formData.append('customer_lastname', payload.client_lastName)
-		formData.append('customer_registrynumber', payload.register_first + payload.register_second + payload.register)
+		formData.append('customer_registrynumber', registry_number)
 		formData.append('customer_phone', payload.phone)
 		formData.append('description', payload.description)
 		formData.append('pre_payment_percentage', payload.pre_payment_percentage)
@@ -84,6 +87,7 @@ function* onAddNegotation({ payload }) {
 		formData.append('city_id', payload.city_id)
 		formData.append('district_id', payload.district_id)
 		formData.append('khoroo_id', payload.khoroo_id)
+		formData.append('is_company', payload.is_company)
 
 		//let params = queryString.parse(payload)
 		let res = yield request(token).post(`toilet/api/negotations`, formData)

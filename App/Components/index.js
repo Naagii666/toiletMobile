@@ -46,6 +46,9 @@ export const Wrapper = (props) => {
 export const Separator = () => {
 	return <View style={{ height: 1, backgroundColor: '#f2f2f2', marginTop: 10, marginBottom: 10 }}/>
 }
+export const Separator2 = () => {
+	return <View style={{ height: 1, backgroundColor: '#fff', marginTop: 10, marginBottom: 10 }}/>
+}
 
 function _getJustify(type) {
 	switch(type) {

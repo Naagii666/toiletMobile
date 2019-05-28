@@ -179,15 +179,16 @@ const statusData = [{
 class EditNegotation  extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props.negotiation)
     this.state = {
       firstName  : '',
       client_lastName: '',
       phone: '',
       register: '',
-      negotiation_id: props.negotiation.negotiation_id,
-      statusName: props.negotiation.status,
-      selected_products: [],
+      negotiation_id: props.negotiation.id,
+      statusName: props.negotiation.status - 1,
+      selected_products: props.negotiation.products.map((ret) => Object.assign(ret.product, {
+        quantity: ret.quantity
+      })),
       loading: false,
       product_chooser: false,
       pre_payment_percentage: props.negotiation.pre_payment_percentage,
@@ -281,12 +282,10 @@ class EditNegotation  extends React.Component {
     const { comments, loading } = this.props
     const { navigate } = this.props.navigation
     const { navigation } = this.props;
-    const first_name = firstName;
-    const last_name = navigation.getParam('last_name');
-    const registry_number = navigation.getParam('registry_number');
     let { selected_products, statusName, description, pre_payment_percentage, loan_month, city_id, district_id, firstName, client_lastName } = this.state
+    const { first_name, last_name, registry_number, phone, is_company } = this.props.negotiation.customer
 
-    console.log(statusName)
+    //alert(statusName)
 
     return (
       <Wrapper>
@@ -294,20 +293,21 @@ class EditNegotation  extends React.Component {
           <KeyboardAwareScrollView contentContainerStyle={styles.container2}
           resetScrollToCoords={{x:1,y:1}}
           scrollEnabled={false}>
-            <View style={{ marginBottom: 10, }}>
-                <Text>
-                  1. Харилцагчийн мэдээлэл
-                </Text>
-              </View>
-            <View style={styles.rowText}>
-              <Text style={{color:'#f9ac19',fontSize:16}}>Нэр: {first_name}</Text>
+            <View style={{ marginBottom: 10, paddingHorizontal: 20, paddingTop: 20, }}>
+                <View style={{ marginBottom: 10, }}>
+                  <Text>
+                    1. Харилцагчийн мэдээлэл
+                  </Text>
+                </View>
+                <View style={{ paddingVertical: 2, }}>
+                  <Text>Нэр: <Text style={{ fontWeight: 'bold'}}>{first_name} {last_name}</Text></Text>
+                </View>
+                <Text>Регистер: <Text style={{ fontWeight: 'bold'}}>{registry_number}</Text></Text>
+                <View style={{ paddingVertical: 2, }}>
+                  <Text>Утас: <Text style={{ fontWeight: 'bold'}}>{phone}</Text></Text>
+                </View>
             </View>
-            <View style={styles.rowText}>
-              <Text style={{textAlign: 'right',color:'#f9ac19',fontSize:16}}>Овог: {last_name}</Text>
-            </View>
-            <View style={styles.rowText}>
-              <Text style={{textAlign: 'right',color:'#f9ac19',fontSize:16}}>Регистер: {registry_number}</Text>
-            </View>
+            
                 {/* Bvteegdhvvn */}
             <View style={{ padding: 20, backgroundColor: colors.gray }}>
               <View style={{ marginBottom: 10, }}>
@@ -356,7 +356,7 @@ class EditNegotation  extends React.Component {
                   rippleCentered={true}
                   inputContainerStyle={{ borderBottomColor: 'transparent', marginLeft:16, }}
                   label='Хэлцэлийн төлөв'
-                  value={statusData[statusName].value}
+                  value={statusData[statusName] ? statusData[statusName].value : statusData[statusData.length - 1]}
                   data={statusData}
               />
               <View style={{ flexDirection: 'row'}}>
@@ -420,6 +420,8 @@ class EditNegotation  extends React.Component {
           products={comments}
           selected_products={this.state.selected_products}
           onSelectedProducts={(selected_products) => {
+
+            console.log(selected_products)
             this.setState({ selected_products: selected_products.map((product) => Object.assign(product, {
               quantity: 1,
             })), product_chooser: false })
