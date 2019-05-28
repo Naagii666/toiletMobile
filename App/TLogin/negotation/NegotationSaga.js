@@ -72,7 +72,7 @@ function* onAddNegotation({ payload }) {
 	 try {
 		let token = yield getAuthenticationToken()
 
-		let registry_number = is_company == 1 ? (payload.register_first + payload.register_second + payload.register) : payload.register
+		let registry_number = payload.is_company == 1 ? (payload.register_first + payload.register_second + payload.register) : payload.register
 
 		var formData = new FormData();
 		formData.append('customer_firstname', payload.firstName)
