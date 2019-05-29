@@ -99,7 +99,7 @@ class Register extends Component {
           </View>
           
           <TouchableHighlight style={[Loginstyles.buttonContainer, Loginstyles.loginButton]} 
-              onPress={() =>alert("go back")}>
+              onPress={() =>alert("Хүсэлт илгээлээ")}>
             <Text style={Loginstyles.loginText}>Бүртгүүлэх</Text>
           </TouchableHighlight>
         </KeyboardAwareScrollView>

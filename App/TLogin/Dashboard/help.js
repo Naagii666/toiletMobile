@@ -24,7 +24,7 @@ class help extends Component {
             style={{width:290}}
             javaScriptEnabled={true}
             automaticallyAdjustContentInsets={false}
-            source={{uri: 'https://www.youtube.com/embed/03DskGP1Ct0'}}
+            source={{uri: 'https://www.youtube.com/embed/CrDJ7abpAw8'}}
           />
         </View>
       </View>
