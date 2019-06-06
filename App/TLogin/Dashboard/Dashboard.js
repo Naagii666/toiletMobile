@@ -13,14 +13,20 @@ import {
     StatusBar,
   } from 'react-native'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import axios from 'axios';
 import styles from './../Styles/DashboardScreenStyles'
 import Storage from 'react-native-storage';
 import { Images } from '../../Themes/'
 import CardView from 'react-native-cardview'
 import Icon from 'react-native-vector-icons/FontAwesome'
-//import { deleteAuthenticationToken } from '../../Services/storage'
-import { getAuthenticationToken, deleteAuthenticationToken, getCustomerPicture } from '../../Services/storage'
-import { getCustomerId, deleteCustomerId } from '../../Services/storage'
+import { 
+    getCustomerId, 
+    deleteCustomerId, 
+    setAuthenticationToken,
+    getAuthenticationToken, 
+    deleteAuthenticationToken, 
+    getCustomerPicture 
+  } from '../../Services/storage'
 const storage = new Storage({
   size: 1000,
   defaultExpires: 1000 * 3600 * 24,
@@ -46,21 +52,53 @@ class Dashboard extends Component {
   constructor(props){
     super(props);
     // const { navigation } = this.props;
-
-    // console.log('KAss' + props.navigation.getParam('url', 'some default value'));
     this.state = {
-      name: 'Dulguun',
+      name: '',
       email: '',
       auth_token: '',
-      url: ''
+      url: '',
+      cid: ''
     }
+
+  }
+
+  componentWillMount = () => {
+      // this.fetchData();
   }
 
   componentDidMount = () => {
-    this.props.navigation.setParams({ 
-      onLogout: this.onLogout,
-    });
+      this.props.navigation.setParams({ 
+          onLogout: this.onLogout,
+      });
+      
+      this.fetchData();
   }
+
+  fetchData () {
+      let id = null;
+      // Alert.alert("","did did did");
+      getCustomerId().then((value) => {
+          id = value;
+      })
+      .then(res => {
+          var cust_form = new FormData();
+          cust_form.append("customer_id", id);
+          axios.post('http://124.158.124.60:8080/toilet/api/user/view',cust_form)
+              .then((response) => {
+                  // setAuthenticationToken(response.data.data.auth_token)
+                  this.props.navigation.setParams({
+                      id: response.data.data.customers_id,
+                      first_name: response.data.data.first_name,
+                      img_url: response.data.data.picture
+                  });
+              }).catch(function(error){
+                  alert(error.message);
+                  console.log(JSON.stringify(error));
+              });
+      });
+  }
+
+
 
   onLogout = () => {
     Alert.alert(
@@ -84,12 +122,12 @@ class Dashboard extends Component {
   }
 
   static navigationOptions = ({ navigation }) => {
+    const { params = {} } = navigation.state;
 
-    // const { navigation } = this.props;
-    let url = navigation.getParam('url', 'some default value')
-    let name = navigation.getParam('name', 'some default value')
+    let id = params.id;
 
-    let BASE_URL = 'http://124.158.124.60:8080/toilet/' + url;
+    // let BASE_URL = 'http://124.158.124.60:8080/toilet/' + url;
+    let BASE_URL = 'http://124.158.124.60:8080/toilet/' + params.img_url;
     
     return {
       headerTitle: (
@@ -101,7 +139,10 @@ class Dashboard extends Component {
         }}>
           <TouchableOpacity 
               activeOpacity={0.6}
-              onPress={navigation.getParam('profile')}
+              onPress={() => navigation.navigate('profile', {
+                  itemId: id,
+                })
+              }
             >
             <View style={{ justifyContent: 'center' }}>
               
@@ -121,7 +162,7 @@ class Dashboard extends Component {
             </View>
             </TouchableOpacity>
             <View style={{flex: 1 ,justifyContent: 'center'}}>
-              <Text style={{ fontSize: 19 } }>{ name }</Text>
+              <Text style={{ fontSize: 19 } }>{ params.first_name }</Text>
               <Text style={{ fontSize: 12, color: '#fff' } } adjustFontSizeToFit  numberOfLines={1}> Менежер </Text>
             </View> 
           

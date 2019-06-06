@@ -13,15 +13,15 @@ import NewNegotation from './NewNegotation'
 function Color(status){
   switch(status){
     case 1:
-      return '#8FC93A';
+      return '#CCCCCC';
     case 2:
-      return '#ff0000';
+      return '#FFFF33';
     case 3:
-      return '#f9ac19';
+      return '#66FF00';
     case 4:
-        return 'white';
+      return '#3399FF';
     default:
-      return 'black';
+      return '#FF9999';
   }
 }
 

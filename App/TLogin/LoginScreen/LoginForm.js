@@ -17,8 +17,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import Storage from 'react-native-storage';
 import { Images } from '../../Themes'
 import axios from 'axios'
-import { setAuthenticationToken, setCustomerPicture } from '../../Services/storage'
-import { setCustomerId } from '../../Services/storage'
+import { setCustomerId, getCustomerId, deleteAuthenticationToken, setAuthenticationToken , deleteCustomerId } from '../../Services/storage'
 import Icon from 'react-native-vector-icons/Entypo'
 
 class LoginForm extends Component {
@@ -58,8 +57,6 @@ class LoginForm extends Component {
           }
 
           console.log('login userData ' + JSON.stringify(userData))
-          // alert(userData);
-
           setAuthenticationToken(token)
           setCustomerId(customers_id)
 
@@ -81,6 +78,9 @@ class LoginForm extends Component {
           } else {
             Alert.alert("Алдаа", "Хэрэглэгчийн мэйл/нууц үг буруу байна!");
           }
+        }
+        else{
+          Alert.alert("Алдаа", "Хэрэглэгчийн имэйл эсвэл нууц үг буруу байна!");
         }
       }).catch(error => {
           alert(error.message)
