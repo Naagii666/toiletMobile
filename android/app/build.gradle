@@ -83,7 +83,10 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-    entryFile: "index.js"
+    entryFile: "index.js",
+    bundleAssetName: "index.android.bundle",
+    bundleInAlpha: true,
+    bundleInBeta: true
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -115,8 +118,8 @@ android {
         applicationId "com.toiletmobile"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 8
-        versionName "1.8"
+        versionCode 9
+        versionName "1.9"
         multiDexEnabled true
     }
     signingConfigs {
