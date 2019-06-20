@@ -32,14 +32,15 @@ class DetialFaCheck extends Component{
             barStyle="light-content"
           />
           <View>
-            <Text style={{fontSize:30}}>Танилцуулга</Text>
+            <Text style={{textAlign: 'center',fontSize:30,marginBottom:10,}}>Танилцуулга</Text>
           </View>
           <View style={styles.rowText}>
             <Text style={{color:'#f9ac19',fontSize:16}}>Нэр: {itemId}</Text>
-            <View style={{flex: 1}}>
-              <Text style={{textAlign: 'right',color:'#f9ac19',fontSize:16}}>Үнэ: {JSON.stringify(otherParam)}</Text>
-            </View>
           </View>
+          <View style={{flex: 1}}>
+            <Text style={{textAlign: 'left',color:'#f9ac19',fontSize:16}}>Үнэ: {JSON.stringify(otherParam)}</Text>
+          </View>
+          
           <View>
             <Image 
               style={{width: '100%', height:350, }}
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
   definition: {
     fontSize:15,
     color:'black',
-    alignItems:'center',
+    textAlign:'justify'
   },
   button: {
     alignItems: 'center',

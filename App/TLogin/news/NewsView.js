@@ -1,13 +1,10 @@
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
-import CardView from 'react-native-cardview'
-
 import React from 'react'
 import { View, Text, FlatList, RefreshControl, TouchableHighlight ,Image,StyleSheet, StatusBar} from 'react-native'
 import moment from 'moment'
 import { Row, H2, H3, H4,H5, Wrapper, Separator } from '../../Components'
 import { getMyComments } from './NewsActions'
-import Icon from 'react-native-vector-icons/Entypo'
 // import Icon from 'react-native-vector-icons/FontAwesome'
 
 class NewsView extends React.Component {
@@ -23,7 +20,13 @@ class NewsView extends React.Component {
 	_renderEmpty() {
 		return <H3>Мэдэгдэл алга байна.</H3>
 	}
-
+	newsImage(news_image){
+        if(news_image!=''){
+            return 'http://124.158.124.60:8080/toilet/'+news_image+''
+		}else{
+			return 'http://124.158.124.60:8080/toilet/resources/assets/images/news_images/1560142780.kisspng-computer-icons-instagram-icon-design-download-5ae173724580e2.3113791515247245942847.png'
+		}
+	}
 	CommentItem ({ item }){
     let { news_name, news_date_added, news_description, news_slug, news_image } = item
 		const { navigate } = this.props.navigation
@@ -40,7 +43,7 @@ class NewsView extends React.Component {
 					}) }
 					>
 					<View style={styles.rowContainer}>
-					<Image style={styles.thumb} source={{ uri: 'http://124.158.124.60:8080/toilet/'+news_image+'' }} />
+					<Image style={styles.thumb} source={{ uri: this.newsImage(news_image) }} />
 						<View style={styles.textContainer}>
 						<Text style={styles.newsName} numberOfLines={1}>{ news_name }</Text>
 							<H3></H3>

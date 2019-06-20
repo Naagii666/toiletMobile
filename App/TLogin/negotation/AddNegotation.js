@@ -2,7 +2,7 @@ import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import React from 'react'
 import _ from 'lodash'
-import { ActivityIndicator, Dimensions, View, Text,Image, FlatList, RefreshControl,TouchableHighlight,StyleSheet,Alert, TextInput,ScrollView,StatusBar, TouchableOpacity  } from 'react-native'
+import { ActivityIndicator, Dimensions, View, Text,Image, FlatList, RefreshControl,TouchableHighlight,StyleSheet,Alert, TextInput,ScrollView,StatusBar, TouchableOpacity,Button  } from 'react-native'
 import CardView from 'react-native-cardview';
 import Modal from 'react-native-modalbox'
 import { getMyComments, getLocations } from '../product/ProductsActions'
@@ -16,7 +16,8 @@ import ModalSelector from 'react-native-modal-selector'
 //const DropDown = require('react-native-dropdown')
 import { onAddNegotation } from './NegotationActions'
 import Icon from 'react-native-vector-icons/Ionicons'
-
+import Icon2 from 'react-native-vector-icons/FontAwesome'
+import ImagePicker from 'react-native-image-picker'
 const { width } = Dimensions.get('window')
 const cardWidth = (width / 2) - 40
 
@@ -184,6 +185,7 @@ class AddNegotation  extends React.Component {
       city_id: 0,
       district_id: 0,
       khoroo_id: 0,
+      photo: [],
     }
   }
   componentDidMount() {
@@ -210,7 +212,22 @@ class AddNegotation  extends React.Component {
         return 'black'
     }
   }
-
+  handleChoosePhoto = () => {
+    const options = {
+      noData: true,
+    };
+    if(this.state.photo.length>2){
+      alert('Гурваас олон зураг оруулах боломжгүй')
+    }else{
+      ImagePicker.launchImageLibrary(options, response => {
+        if (response.uri) {
+          let photo = this.state.photo
+          photo.push(response)
+          this.forceUpdate()
+        }
+      });
+    }
+  };
   onStatusChanged = (value) => {
       let statusName
       switch(value){
@@ -237,7 +254,7 @@ class AddNegotation  extends React.Component {
       this.setState({ statusName })
   }
   formValidate() {
-    let { firstName, phone, register, selected_products, city_id, district_id, khoroo_id, statusName, pre_payment_percentage, loan_month } = this.state
+    let { firstName, phone, register, selected_products, city_id, district_id, khoroo_id, statusName, pre_payment_percentage, loan_month,photo } = this.state
     
     if(!register) {
       alert('Харилцагчийн регистр оруулна уу')
@@ -279,6 +296,11 @@ class AddNegotation  extends React.Component {
       return true
     }
 
+    if(photo == 0) {
+      alert('Баталгаажуулах зураг оруулна уу')
+      return true
+    }
+
     return false
   }
 
@@ -296,10 +318,38 @@ class AddNegotation  extends React.Component {
       selected_products
     })
   }
-
+  renderPhoto(){
+    if(this.state.photo!=null){
+      return(
+        this.state.photo.map((photo) => (
+          <View>
+              <Image source={{ uri: photo.uri }} 
+                style={{ width: 100, height: 100,marginVertical:10,marginHorizontal:5 }}/>
+              <TouchableOpacity 
+                activeOpacity={0.6}
+                onPress={()=>
+                  this.state.photo.map(elem =>{
+                    if(elem.uri==photo.uri){
+                      var index=this.state.photo.indexOf(elem);
+                      this.state.photo.splice(index,1);
+                      this.forceUpdate()
+                    }
+                  })
+                }>
+                <Icon2 style={{marginLeft:50}} name='trash-o' size={20} color='red' />  
+              </TouchableOpacity>
+          
+          </View>
+          ))
+      )
+    }
+    
+  }
   render() {
+    const { photo } = this.state;
     const { comments, loading } = this.props
     const { navigate } = this.props.navigation
+    let photos = this.renderPhoto()
     let statusData = [{
       value: 'Шинэ',
     }, {
@@ -569,8 +619,31 @@ class AddNegotation  extends React.Component {
                         onChangeText={description => this.setState({ description })}
                     />
               </View>
-            </View>
-            
+        </View>
+        <View style={{ padding: 20,}}> 
+              <View style={{ marginBottom: 10, }}>
+                  <Text>
+                    5. Баталгаажуулах
+                  </Text>
+              </View>
+              <View >
+      
+                <View style={{ flex: 1,flexDirection: 'row',}}>
+                
+                    {photos}
+                </View>
+                <TouchableOpacity 
+                activeOpacity={0.6}
+                onPress={this.handleChoosePhoto}
+                >
+                <View style={[styles.inputContainer, { marginTop:10,marginBottom: 0, backgroundColor: colors.dark_gray }]}>
+                    <View style={styles.inputs2}>
+                        <Text>Зураг оруулах</Text>
+                    </View>
+                </View>
+              </TouchableOpacity>
+              </View>
+          </View>  
             <View style={{ padding: 20, }}>
             {
               
@@ -651,6 +724,22 @@ const styles = StyleSheet.create({
     //width:250,
     //paddingHorizontal: 20,
     height:45,
+    fontSize:15,
+    marginBottom:20,
+    flexDirection: 'row',
+    alignItems:'center'
+  },
+  inputContainer3: {
+    borderBottomColor: '#F5FCFF',
+    backgroundColor: '#fff',
+    borderRadius:30,
+    borderBottomWidth: 1,
+    borderColor:'lightgrey',
+    borderWidth:1,
+    //width:250,
+    //paddingHorizontal: 20,
+    height:45,
+    width:200,
     fontSize:15,
     marginBottom:20,
     flexDirection: 'row',

@@ -40,7 +40,7 @@ class NegotationDetial extends Component{
     const { navigation } = this.props;
     let item = navigation.getParam('item')
     const { first_name, last_name, registry_number, phone, is_company } = item.customer
-    const { status, created_at, city, district, khoroo, total_price, products, sheets, slug, customer_approve, loan_month, pre_payment_percentage, description } = item
+    const { status, created_at, city, district, khoroo, total_price, products, sheets, slug, customer_approve, loan_month, pre_payment_percentage, description,negotiation_photo } = item
 
     const products_name = navigation.getParam('products_name', 'some default value');
     const products_image = navigation.getParam('products_image', 'some default value');
@@ -50,9 +50,12 @@ class NegotationDetial extends Component{
     let tableData = sheets.map((sheet) => [sheet.payment_day, sheet.amount_sheet])
 
     let productTableHead = ['Нэр', 'Тоо', 'Нэгжийн үнэ']
-    let productTableData = products.map((product) => [product.product.products_name, product.quantity, product.product_price])    
+    let productTableData = products.map((product) => [product.product.products_name, product.quantity, product.product_price])  
+    // let negotiation_photoData = negotiation_photo.map((photo) => [photo.photo])   
     const contract_url = is_company == 1 ? 'contract_individual_form' : 'contract_entity_form'
-
+    const photos = negotiation_photo.map((photo) => (<Image 
+    style={{width: 100, height:100,marginVertical:10,marginHorizontal:5 }}
+    source={{ uri: 'http://124.158.124.60:8080/toilet/'+[photo.photo]+'' }} />))
     ///contract_entity_form/?:slug
 ///contract_individual_form/?:slug
 
@@ -112,11 +115,21 @@ class NegotationDetial extends Component{
               <Text>Хэлцэл зөвшөөрсөн эсэх: <Text style={{ fontWeight: 'bold'}}>{customer_approve == 1 ? 'Тийм' : 'Үгүй'}</Text></Text>
             </View>
 
-            <View>
+            <View style={{ paddingVertical: 20, }}>
               <Text>
                 Тайлбар: {description}
               </Text>
             </View>
+
+            <View style={{ paddingVertical: 20, }}>
+              <Text>
+                Баталгаажуулалт: 
+              </Text>
+              <View style={{ flex: 1,flexDirection: 'row',}}>
+                {photos}
+              </View>
+            </View>
+
           </View>
         </ScrollView>
         <View style={{ paddingBottom: 10, paddingHorizontal: 10, flexDirection: 'row' }}>

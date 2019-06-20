@@ -11,23 +11,21 @@ const CommentItem = ({ item, index }) => {
 	let { comment, Date } = item
 
 	return (
+		<View>
 		<View style={{ paddingHorizontal: 20,paddingVertical:8, backgroundColor:"#DCDCDC",borderRadius:10}}>
 			<Row>
+				{/* <View>
+					<Icon name='comments' size={40} color='#f9ac19' />
+				</View> */}
 				<View>
-					{/* <Icon name='comments' size={40} color='#f9ac19' /> */}
-				</View>
-				<View>
-				<Row justify='between' style={{ flex: 1, }}>
+					<View  style={styles.rowText}>
 						<H4>
-							<Text>Сэтгэгдэл</Text>
-						</H4>
-						<View  style={{justifyContent:'center'}}> 
-							<H4>
-								<Text>{moment(Date).format('YYYY-MM-DD')}</Text>
-							</H4>
-						</View>
-						
-					</Row>
+							<Text style={{textAlign: 'left'}}>Сэтгэгдэл</Text>
+						</H4 >
+						{/* <H4>
+							<Text style={{textAlign: 'right'}}>{moment(Date).format('YYYY-MM-DD')}</Text>
+						</H4>	 */}
+					</View>
 					<View style={{ paddingTop: 10, }}>
 						<H3>
 							{comment}
@@ -37,6 +35,10 @@ const CommentItem = ({ item, index }) => {
 				</View>
 			</Row>
 		</View>
+		<View style={{ alignItems: 'flex-end' } }>
+		<Text>{moment(Date).format('YYYY-MM-DD')}</Text>
+	  </View>
+	  </View>
 	)
 }
 
@@ -130,7 +132,8 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 10,
     // flex:1/3,
-    borderRadius:10,
+	borderRadius:10,
+	color:'black',
     alignContent: 'flex-end',
   },
   photo: {

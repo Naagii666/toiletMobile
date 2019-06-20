@@ -16,7 +16,8 @@ import ModalSelector from 'react-native-modal-selector'
 //const DropDown = require('react-native-dropdown')
 import { onAddNegotation, onEditNegotation } from './NegotationActions'
 import Icon from 'react-native-vector-icons/Ionicons'
-
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
+import ImagePicker from 'react-native-image-picker'
 const { width } = Dimensions.get('window')
 const cardWidth = (width / 2) - 40
 
@@ -27,6 +28,7 @@ const cardWidth = (width / 2) - 40
 // }, {
 //   value: 'Эрдэнэт'
 // }]
+
 import ProductList from './ProductList'
 
 class ProductSelector extends React.Component {
@@ -194,7 +196,9 @@ class EditNegotation  extends React.Component {
       pre_payment_percentage: props.negotiation.pre_payment_percentage,
       loan_month: props.negotiation.loan_month,
       description: props.negotiation.description,
-      
+      negotiation_photo: props.negotiation.negotiation_photo,
+      photo:[],
+      deleted_photos:[]
     }
   }
   componentDidMount() {
@@ -221,7 +225,26 @@ class EditNegotation  extends React.Component {
         return 'black'
     }
   }
-
+  updateState(e){
+    this.setState({ photo:e });
+  }
+  handleChoosePhoto = () => {
+    const options = {
+      noData: true,
+    };
+    if(this.state.negotiation_photo.length + this.state.photo.length>2){
+      alert('Гурваас олон зураг оруулах боломжгүй')
+    }else{
+      ImagePicker.launchImageLibrary(options, response => {
+        if (response.uri) {
+          let photo = this.state.photo
+          photo.push(response)
+          this.setState({ photo: photo });
+        }
+      });
+    }
+  };
+ 
   onStatusChanged = (value) => {
       let statusName
       switch(value){
@@ -277,16 +300,68 @@ class EditNegotation  extends React.Component {
       selected_products
     })
   }
-
+  renderNegotiationPhoto(){
+    if(this.state.negotiation_photo!=null){
+      return(
+        this.state.negotiation_photo.map((photo) => (
+          <View>
+              <Image 
+            style={{width: 100, height:100,marginVertical:10,marginHorizontal:5 }}
+            source={{ uri: 'http://124.158.124.60:8080/toilet/'+[photo.photo]+'' }} />
+              <TouchableOpacity 
+                activeOpacity={0.6}
+                onPress={()=>
+                  this.state.negotiation_photo.map(elem =>{
+                    if(elem.photo==photo.photo){
+                      var index=this.state.negotiation_photo.indexOf(elem);
+                      this.state.deleted_photos.push(this.state.negotiation_photo[index])
+                      this.state.negotiation_photo.splice(index,1);
+                      this.forceUpdate()
+                    }
+                  })
+                }>
+                <FontAwesomeIcon style={{marginLeft:50}} name='trash-o' size={20} color='red' />  
+              </TouchableOpacity>
+          
+          </View>
+          ))
+      )
+    }
+  }
+  renderPhotoEdit(){
+    if(this.state.photo!=null){
+      return(
+        this.state.photo.map((photo) => (
+          <View>
+              <Image source={{ uri: photo.uri }} 
+                style={{ width: 100, height: 100,marginVertical:10,marginHorizontal:5 }}/>
+              <TouchableOpacity 
+                activeOpacity={0.6}
+                onPress={()=>
+                  this.state.photo.map(elem =>{
+                    if(elem.uri==photo.uri){
+                      var index=this.state.photo.indexOf(elem);
+                      this.state.photo.splice(index,1);
+                      this.forceUpdate()
+                    }
+                  })
+                }>
+                <FontAwesomeIcon style={{marginLeft:50}} name='trash-o' size={20} color='red' />  
+              </TouchableOpacity>
+          
+          </View>
+          ))
+      )
+    }
+  }
   render() {
     const { comments, loading } = this.props
     const { navigate } = this.props.navigation
     const { navigation } = this.props;
-    let { selected_products, statusName, description, pre_payment_percentage, loan_month, city_id, district_id, firstName, client_lastName } = this.state
+    let { selected_products, statusName, description, negotiation_photo,pre_payment_percentage, loan_month, city_id, district_id, firstName, client_lastName } = this.state
     const { first_name, last_name, registry_number, phone, is_company } = this.props.negotiation.customer
-
-    //alert(statusName)
-
+    const photos = this.renderNegotiationPhoto()
+    const photosEdit = this.renderPhotoEdit()
     return (
       <Wrapper>
         <ScrollView style={styles.container}>
@@ -393,6 +468,25 @@ class EditNegotation  extends React.Component {
                         underlineColorAndroid='transparent'
                         onChangeText={description => this.setState({ description })}
                     />
+              </View>
+              <View style={{ paddingVertical: 20, }}>
+                <Text>
+                  5. Баталгаажуулалт: 
+                </Text>
+                <View style={{ flex: 1,flexDirection: 'row'}}>
+                  {photos}
+                  {photosEdit}
+                </View>
+                <TouchableOpacity 
+                activeOpacity={0.6}
+                onPress={this.handleChoosePhoto}
+                >
+                <View style={[styles.inputContainer, { marginTop:10,marginBottom: 0, backgroundColor: colors.dark_gray }]}>
+                    <View style={styles.inputs2}>
+                        <Text>Зураг оруулах</Text>
+                    </View>
+                </View>
+              </TouchableOpacity>
               </View>
             </View>
             

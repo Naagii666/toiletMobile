@@ -19,7 +19,8 @@ class NewsDetial extends Component{
     const news_description = navigation.getParam('news_description', 'some default value');
     const news_date_added = navigation.getParam('news_date_added', 'some default value');
     const url = navigation.getParam('url', 'some default value');
-    const regex = /(<([^>]+)>)/ig;
+    const regex = /([&]nbsp[;])*(<.*?>)/ig;
+    //let imageUrl = url;
     return(
         <ScrollView>
             <View style={styles.container}>
@@ -27,17 +28,17 @@ class NewsDetial extends Component{
                 <Text style={{fontSize:18, color:'black'}}> {news_name} </Text>
             </View>
             <View style={styles.rowText}>
-                <Text style={{color:'#f9ac19',fontSize:16}}>{  }</Text>
+                {/* <Text style={{color:'#f9ac19',fontSize:16}}>{  }</Text> */}
                 <View style={{flex: 1}}>
-                    <Text style={{textAlign: 'right',color:'#f9ac19',fontSize:16}}> {news_date_added}</Text>
+                    <Text style={{textAlign: 'left',color:'#f9ac19',fontSize:16}}> {news_date_added}</Text>
                 </View>
             </View>
             <View>
                 <Image 
-                    style={{width: '100%', height:400, }}
+                    style={[ url == '' ? { height: 0, } : { height: 400, width: '100%', }]}
                     source={{ uri: 'http://124.158.124.60:8080/toilet/'+url+'' }} />
             </View>
-            <View style={{alignItems:'center',marginTop:20}}>
+            <View style={{alignItems:'center',marginTop:20,flex: 1,flexWrap:'wrap'}}>
                 <Text style={styles.definition}>{news_description.replace(regex,'')}</Text>
             </View>
             </View>
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
   definition: {
     fontSize:15,
     color:'black',
-    alignItems:'center',
+    textAlign:'justify'
   },
   button: {
     alignItems: 'center',

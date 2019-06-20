@@ -38,7 +38,17 @@ function* onEditNegotation({ payload }) {
 		formData.append('loan_month', payload.loan_month)
 		formData.append('status', payload.statusName)
 		formData.append('products', JSON.stringify(payload.selected_products.map((product) => { return { product_id: product.products_id, price: product.products_price, quantity: product.quantity }})))
+		formData.append('deleted_photos', JSON.stringify(payload.deleted_photos.map((deleted_photos) => { return { photo_uri:deleted_photos.photo ,id:deleted_photos.id}})))
 
+		for(i=0;i<3;i++){
+			if(payload.photo[i]){
+				formData.append('photo'+[i],{
+					uri:	payload.photo[i].uri,
+					type:	'image/jpeg',
+					name:	payload.photo[i].fileName,
+				});
+			}
+		}
 		//let params = queryString.parse(payload)
 		let res = yield request(token).post(`toilet/api/negotations/${payload.negotiation_id}`, formData)
 		
@@ -71,7 +81,6 @@ function* onEditNegotation({ payload }) {
 function* onAddNegotation({ payload }) {
 	 try {
 		let token = yield getAuthenticationToken()
-
 		let registry_number = payload.is_company == 1 ? (payload.register_first + payload.register_second + payload.register) : payload.register
 
 		var formData = new FormData();
@@ -88,8 +97,42 @@ function* onAddNegotation({ payload }) {
 		formData.append('district_id', payload.district_id)
 		formData.append('khoroo_id', payload.khoroo_id)
 		formData.append('is_company', payload.is_company)
-
+		// payload.photo.forEach(photo => {
+		// 	let i=0
+		// 	let sendName='photo'+[i]
+		// 	i=i+1
+		// 	formData.append(sendName,{
+		// 		uri:	photo.uri,
+		// 		type:	'image/jpeg',
+		// 		name:	photo.fileName,
+		// 	});
+		// })
+		for(i=0;i<3;i++){
+			if(payload.photo[i]){
+				formData.append('photo'+[i],{
+					uri:	payload.photo[i].uri,
+					type:	'image/jpeg',
+					name:	payload.photo[i].fileName,
+				});
+			}
+		}
+		// formData.append('photo', payload.photo)
+		// formData.append('photo', JSON.stringify(payload.photo.map((photo) => { return { 
+		// 	uri:	photo.uri,
+		// 	type:	'image/jpeg',
+		// 	name:	photo.fileName, }})))
 		//let params = queryString.parse(payload)
+
+		// const data = new FormData()
+
+		// payload.photo.forEach((photo) => {
+  		// const newFile = {
+		// 	uri:	photo.uri,
+		// 	type:	'image/jpeg',
+		// 	name:	photo.fileName,
+  		// }
+  		// formData.append('photo', newFile)
+		// });
 		let res = yield request(token).post(`toilet/api/negotations`, formData)
 		
 		if(!res.data.success) {
@@ -109,7 +152,6 @@ function* onAddNegotation({ payload }) {
 
 		yield put(NavigationActions.back())
 	 } catch(e) {
-		// alert(e.message)
 		alert(e.message)
 		yield put({
 			type: types.ON_ADD_NEGOTATION_FAILED
