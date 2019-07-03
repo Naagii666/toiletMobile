@@ -4,6 +4,7 @@ const queryString = require('query-string');
 import { request, _getToken } from '../../utils/api'
 import { getAuthenticationToken } from '../../Services/storage'
 import { NavigationActions } from 'react-navigation'
+import { Alert} from 'react-native'
 
 function* getFacebookComments() {
 	try {
@@ -27,7 +28,77 @@ function* getFacebookComments() {
 		})
 	}
 }
+function* onSendInvoice({payload}){
+	try {
+		let token = yield getAuthenticationToken()
+		let res = yield request(token).post(`toilet/api/send_invoice?id=${payload}`)
+		if(!res.data.success) {
+			return yield put({
+				type: types.ON_SEND_INVOICE_FAILED
+			})
+		}
+		yield put({
+			type: types.ON_SEND_INVOICE_SUCCESS,
+			payload: res.data
+		})
 
+	 } catch(e) {
+		alert(e.message)
+		yield put({
+			type: types.ON_SEND_INVOICE_FAILED
+		})
+	 }
+}
+function* onRenew({payload}){
+	// alert(payload)
+	try {
+		let token = yield getAuthenticationToken()
+		let res = yield request(token).post(`toilet/api/renew_status?id=${payload}`)
+		// alert(res.data.message)
+		Alert.alert("Мэдэгдэл", res.data.message);
+		if(!res.data.success) {
+			return yield put({
+				type: types.ON_RENEW_FAILED
+			})
+		}
+		yield put({
+			type: types.ON_RENEW_SUCCESS,
+			payload: res.data
+		})
+		yield put(NavigationActions.back())
+		yield put(NavigationActions.back())
+	 } catch(e) {
+		alert(e.message)
+		yield put({
+			type: types.ON_RENEW_FAILED
+		})
+	 }
+}
+function* onCancel({payload}){
+	
+	try {
+		let token = yield getAuthenticationToken()
+		let res = yield request(token).post(`toilet/api/cancel_status?id=${payload}`)
+		Alert.alert("Мэдэгдэл", res.data.message);
+		if(!res.data.success) {
+			return yield put({
+				type: types.ON_CANCEL_FAILED
+			})
+		}
+		yield put({
+			type: types.ON_CANCEL_SUCCESS,
+			payload: res.data
+		})
+		// getFacebookComments()
+		yield put(NavigationActions.back())
+		yield put(NavigationActions.back())
+	 } catch(e) {
+		alert(e.message)
+		yield put({
+			type: types.ON_CANCEL_FAILED
+		})
+	 }
+}
 function* onEditNegotation({ payload }) {
 	try {
 		let token = yield getAuthenticationToken()
@@ -87,6 +158,7 @@ function* onAddNegotation({ payload }) {
 		formData.append('customer_firstname', payload.firstName)
 		formData.append('customer_lastname', payload.client_lastName)
 		formData.append('customer_registrynumber', registry_number)
+		formData.append('email', payload.email)
 		formData.append('customer_phone', payload.phone)
 		formData.append('description', payload.description)
 		formData.append('pre_payment_percentage', payload.pre_payment_percentage)
@@ -206,11 +278,24 @@ function* watchEditNegotation() {
 	yield takeEvery(types.ON_EDIT_NEGOTATION, onEditNegotation)
 }
 
+function* watchOnSendInvoice() {
+	yield takeEvery(types.ON_SEND_INVOICE, onSendInvoice)
+}
+function* watchOnRenew() {
+	yield takeEvery(types.ON_RENEW, onRenew)
+}
+function* watchOnCancel() {
+	yield takeEvery(types.ON_CANCEL, onCancel)
+}
+
 export default function *root() {
   yield all([
     fork(watchGetMyComments),
 		fork(watchGetFacebookComments),
 		fork(watchAddNegotation),
 		fork(watchEditNegotation),
+		fork(watchOnSendInvoice),
+		fork(watchOnRenew),
+		fork(watchOnCancel),
   ])
 }

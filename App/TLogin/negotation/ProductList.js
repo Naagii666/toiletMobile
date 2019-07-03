@@ -30,7 +30,7 @@ const ProductItem = ({ product, onQuantityChanged }) => {
       <ModalSelector
           data={productsTempate}
           cancelText={'Буцах'}
-          initValue="1"
+          initValue={product.quantity}
           style={{
             backgroundColor: '#fff',
           }}

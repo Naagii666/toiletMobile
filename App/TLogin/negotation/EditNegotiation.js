@@ -185,7 +185,9 @@ class EditNegotation  extends React.Component {
       firstName  : '',
       client_lastName: '',
       phone: '',
+      email:'',
       register: '',
+      
       negotiation_id: props.negotiation.id,
       statusName: props.negotiation.status - 1,
       selected_products: props.negotiation.products.map((ret) => Object.assign(ret.product, {
@@ -197,6 +199,7 @@ class EditNegotation  extends React.Component {
       loan_month: props.negotiation.loan_month,
       description: props.negotiation.description,
       negotiation_photo: props.negotiation.negotiation_photo,
+      number:props.negotiation.number,
       photo:[],
       deleted_photos:[]
     }
@@ -358,8 +361,8 @@ class EditNegotation  extends React.Component {
     const { comments, loading } = this.props
     const { navigate } = this.props.navigation
     const { navigation } = this.props;
-    let { selected_products, statusName, description, negotiation_photo,pre_payment_percentage, loan_month, city_id, district_id, firstName, client_lastName } = this.state
-    const { first_name, last_name, registry_number, phone, is_company } = this.props.negotiation.customer
+    let { selected_products, statusName, description, negotiation_photo,pre_payment_percentage, loan_month, city_id, district_id, firstName, client_lastName ,number} = this.state
+    const { first_name, last_name, registry_number, phone, is_company,email } = this.props.negotiation.customer
     const photos = this.renderNegotiationPhoto()
     const photosEdit = this.renderPhotoEdit()
     return (
@@ -375,11 +378,17 @@ class EditNegotation  extends React.Component {
                   </Text>
                 </View>
                 <View style={{ paddingVertical: 2, }}>
+                  <Text>Хэлцэлийн дугаар: <Text style={{ fontWeight: 'bold'}}>{number}</Text></Text>
+                </View>
+                <View style={{ paddingVertical: 2, }}>
                   <Text>Нэр: <Text style={{ fontWeight: 'bold'}}>{first_name} {last_name}</Text></Text>
                 </View>
                 <Text>Регистер: <Text style={{ fontWeight: 'bold'}}>{registry_number}</Text></Text>
                 <View style={{ paddingVertical: 2, }}>
                   <Text>Утас: <Text style={{ fontWeight: 'bold'}}>{phone}</Text></Text>
+                </View>
+                <View style={{ paddingVertical: 2, }}>
+                  <Text>Mail: <Text style={{ fontWeight: 'bold'}}>{email}</Text></Text>
                 </View>
             </View>
             
@@ -399,7 +408,7 @@ class EditNegotation  extends React.Component {
                 activeOpacity={0.6}
                 onPress={() => this.setState({ product_chooser: true })}
               >
-                <View style={[styles.inputContainer, { marginBottom: 0, backgroundColor: colors.dark_gray }]}>
+                <View style={[styles.inputContainer, { marginBottom: 0, backgroundColor: '#f9ac19' }]}>
                     <View style={styles.inputs2}>
                         <Text>Бүтээгдэхүүн тохируулах</Text>
                     </View>
@@ -481,7 +490,7 @@ class EditNegotation  extends React.Component {
                 activeOpacity={0.6}
                 onPress={this.handleChoosePhoto}
                 >
-                <View style={[styles.inputContainer, { marginTop:10,marginBottom: 0, backgroundColor: colors.dark_gray }]}>
+                <View style={[styles.inputContainer, { marginTop:10,marginBottom: 0, backgroundColor: '#f9ac19' }]}>
                     <View style={styles.inputs2}>
                         <Text>Зураг оруулах</Text>
                     </View>

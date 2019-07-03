@@ -34,14 +34,18 @@ class ProductSelector extends React.Component {
   state = {
     selected_products: this.props.selected_products
   }
-
+  
   toggleProduct = (product) => {
     let selected_products = this.state.selected_products
 
     let index = _.findIndex(selected_products, (cur) => {
       return cur.products_id == product.products_id
     })
+    if(product.products_type==2){
+      alert(product.products_type)
 
+
+    }
     if(index == -1) {
       selected_products.push(product)
       this.setState({
@@ -58,10 +62,10 @@ class ProductSelector extends React.Component {
   }
 
   CommentItem = ({ item }) => {
-    let { product_id, products_name, products_price, products_description, products_image,client_firstname } = item
+    let { product_id, products_name, products_price, products_description, products_image,products_type,client_firstname } = item
 
     let is_selected = _.findIndex(this.state.selected_products, (product) =>  { return product.products_id == item.products_id }) != -1 
-
+    
     return (
       <CardView
         style={{ flex: 1, margin: 2 }}
@@ -75,7 +79,8 @@ class ProductSelector extends React.Component {
         />
         <TouchableHighlight
           underlayColor={'transparent'}
-          onPress={() => this.toggleProduct(item)}
+          onPress={() => this.toggleProduct(item)
+          }
           style={{ flex:1/3, aspectRatio:1 }}>
           <View style={{ overflow: 'hidden', paddingBottom:15, justifyContent:'center', alignItems:'center' }}>
             <H4>{products_name}</H4>
@@ -86,6 +91,7 @@ class ProductSelector extends React.Component {
               />
               {
                 is_selected && (
+                    
                     <View
                       style={{
                         backgroundColor: 'rgba(143, 201, 58, 0.6)',
@@ -166,6 +172,7 @@ class AddNegotation  extends React.Component {
     super(props);
     this.state = {
       firstName  : '',
+      email : '',
       client_lastName: '',
       is_company: 1,
       phone: '',
@@ -254,7 +261,7 @@ class AddNegotation  extends React.Component {
       this.setState({ statusName })
   }
   formValidate() {
-    let { firstName, phone, register, selected_products, city_id, district_id, khoroo_id, statusName, pre_payment_percentage, loan_month,photo } = this.state
+    let { firstName, phone, register, selected_products, city_id, district_id, khoroo_id, statusName, pre_payment_percentage, loan_month,photo,email } = this.state
     
     if(!register) {
       alert('Харилцагчийн регистр оруулна уу')
@@ -270,7 +277,10 @@ class AddNegotation  extends React.Component {
       alert('Харилцагчийн утас оруулна уу')
       return true
     }
-
+    // if(!email) {
+    //   alert('Харилцагчийн майл хаяг оруулна уу')
+    //   return true
+    // }
     if(selected_products.length == 0) {
       alert('Бүтээгдэхүүн сонгоно уу')
       return true
@@ -295,12 +305,7 @@ class AddNegotation  extends React.Component {
       alert('Хэлцлийн төлөв сонгоно уу')
       return true
     }
-
-    if(photo == 0) {
-      alert('Баталгаажуулах зураг оруулна уу')
-      return true
-    }
-
+    
     return false
   }
 
@@ -354,13 +359,17 @@ class AddNegotation  extends React.Component {
       value: 'Шинэ',
     }, {
       value: 'Хүлээгдэж байгаа',
-    }, {
-      value: 'Үргэлжилж буй',
-    }, {
-      value: 'Дууссан',
-    }, {
-      value: 'Цуцлагдсан',
-    }];
+    }, 
+    // {
+    //   value: 'Үргэлжилж буй',
+    // }, 
+    // {
+    //   value: 'Дууссан',
+    // }, 
+    // {
+    //   value: 'Цуцлагдсан',
+    // }
+    ];
 
     let productData = [{
       value: '1',
@@ -496,13 +505,23 @@ class AddNegotation  extends React.Component {
                   )
               }
               
-              <View style={[styles.inputContainer, { marginBottom: 0, }]}>
+              <View style={[styles.inputContainer]}>
                     <TextInput style={styles.inputs}
                         placeholder="Утас"
                         keyboardType="default"
                         value={this.state.phone}
                         underlineColorAndroid='transparent'
                         onChangeText={phone => this.setState({ phone })}
+                    />
+              </View>
+
+              <View style={[styles.inputContainer, { marginBottom: 0, }]}>
+                    <TextInput style={styles.inputs}
+                        placeholder="Email"
+                        keyboardType="email-address"
+                        value={this.state.email}
+                        underlineColorAndroid='transparent'
+                        onChangeText={email => this.setState({ email })}
                     />
               </View>
             </View>
@@ -513,7 +532,7 @@ class AddNegotation  extends React.Component {
                   2. Бүтээгдэхүүний мэдээлэл
                 </Text>
               </View>
-              <View style={{ height: 1, backgroundColor: 'lightgrey' }} />
+              <View style={{ height: 1, backgroundColor: '#f9ac19' }} />
               <ProductList 
                 products={selected_products} 
                 onQuantityChanged={this.onQuantityChanged}
@@ -522,7 +541,7 @@ class AddNegotation  extends React.Component {
                 activeOpacity={0.6}
                 onPress={() => this.setState({ product_chooser: true })}
               >
-                <View style={[styles.inputContainer, { marginBottom: 0, backgroundColor: colors.dark_gray }]}>
+                <View style={[styles.inputContainer, { marginBottom: 0, backgroundColor: '#f9ac19' }]}>
                     <View style={styles.inputs2}>
                         <Text>Бүтээгдэхүүн тохируулах</Text>
                     </View>
@@ -636,7 +655,7 @@ class AddNegotation  extends React.Component {
                 activeOpacity={0.6}
                 onPress={this.handleChoosePhoto}
                 >
-                <View style={[styles.inputContainer, { marginTop:10,marginBottom: 0, backgroundColor: colors.dark_gray }]}>
+                <View style={[styles.inputContainer, { marginTop:10,marginBottom: 0, backgroundColor: '#f9ac19' }]}>
                     <View style={styles.inputs2}>
                         <Text>Зураг оруулах</Text>
                     </View>
@@ -754,7 +773,7 @@ const styles = StyleSheet.create({
 },
 inputs2:{
   marginLeft:16,
-  borderBottomColor: '#DCDCDC',
+  borderBottomColor: '#f9ac19',
   fontSize:15,
   flex:1,
 },

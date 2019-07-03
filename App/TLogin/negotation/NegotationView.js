@@ -45,7 +45,7 @@ class NegotationView extends React.Component {
 	  this.props.getMyComments()
 	  //console.log(this.props.comments)
 	}
-
+  
 	_onRefresh() {
 		this.props.getMyComments()
 	}
@@ -61,7 +61,7 @@ class NegotationView extends React.Component {
     //   city_name, district_name, khoroo_name, products_name, products_image, total_price
     // } = item
 
-    let { created_at, status } = item
+    let { created_at, status,number } = item
     let { first_name, last_name, registry_number, phone } = item.customer
     //alert(created_at)
     
@@ -74,12 +74,15 @@ class NegotationView extends React.Component {
       >
         <View style={{ paddingHorizontal: 10, }}>
           <View style={{flexDirection: 'row', flex:1}}>
+            
             <Icon name='circle' size={60} color={Color(status)} style={{
                 textShadowColor: '#dcdcdc',
                 shadowOpacity: 0.4,
                 shadowRadius: 5,
+                
                 textShadowOffset:{width: 1,height:5}
             }}/>
+            <Text style={{ marginTop: 20,marginLeft:-45,color:'black' }}>{number}</Text>
             <View style={{ flex: 1, paddingHorizontal: 10, justifyContent: 'center' }}>
               <Row>
                   <H3> { first_name } </H3>
@@ -108,6 +111,7 @@ class NegotationView extends React.Component {
 
 		return (
 			<Wrapper padding={10}>
+      
         <StatusBar
           backgroundColor="#f9ac19"
           barStyle="light-content"
