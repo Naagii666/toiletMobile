@@ -15,6 +15,7 @@ import AddNegotation from '../TLogin/negotation/AddNegotation'
 import EditNegotiation from '../TLogin/negotation/EditNegotiation'
 import Login from '../TLogin/LoginScreen/LoginForm'
 import Register from '../TLogin/LoginScreen/Register'
+import Forgot_password from '../TLogin/LoginScreen/Forgot_password'
 import Dashboard from '../TLogin/Dashboard/Dashboard'
 import FaCheck from '../TLogin/Dashboard/FaCheck'
 import DetialFaCheck from '../TLogin/product/DetialFaCheck'
@@ -252,6 +253,18 @@ const PrimaryNav = createStackNavigator({
   // },
   Register: {
     screen: Register,
+    navigationOptions: {
+      headerStyle:{
+        backgroundColor: "#f9ac19",
+      },
+      title: '',
+      // headerLeft: null,
+      headerTintColor: 'white',
+      gesturesEnabled: false,
+    },
+  },
+  Forgot_password: {
+    screen: Forgot_password,
     navigationOptions: {
       headerStyle:{
         backgroundColor: "#f9ac19",

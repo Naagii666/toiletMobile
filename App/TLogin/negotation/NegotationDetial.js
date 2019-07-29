@@ -40,7 +40,8 @@ class InvoiceViewer extends React.Component {
         },
         {text: 'Тийм', onPress: () => {
           console.log('send Pressed')
-          this.props.onSendInvoice(invoice_id)
+
+          this.props.onSendInvoice(invoice_id,true)
         
         }
       },
@@ -198,7 +199,7 @@ class NegotationDetial extends Component{
           }} style={[styles.button, { flex: 1, }]}>
             <Text>Нөхцөл харах</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {this.props.onRenew(id)}} style={[styles.button, { flex: 1, }, {backgroundColor: '#b5b5b5'}]}>
+          <TouchableOpacity onPress={() => {this.props.onRenew(id)}} style={[styles.button, { flex: 1, }, {backgroundColor: '#f9ac19'}]}>
             <Text>Шинэчилэх</Text>
           </TouchableOpacity>
         </View>

@@ -28,8 +28,9 @@ function* getFacebookComments() {
 		})
 	}
 }
-function* onSendInvoice({payload}){
-	try {
+function* onSendInvoice({payload,data}){
+	if(data){
+		try {
 		let token = yield getAuthenticationToken()
 		let res = yield request(token).post(`toilet/api/send_invoice?id=${payload}`)
 		if(!res.data.success) {
@@ -48,6 +49,8 @@ function* onSendInvoice({payload}){
 			type: types.ON_SEND_INVOICE_FAILED
 		})
 	 }
+	}
+	
 }
 function* onRenew({payload}){
 	// alert(payload)

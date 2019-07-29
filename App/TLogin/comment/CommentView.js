@@ -8,7 +8,7 @@ import { Row, H2, H3, H4, Wrapper, Separator2 } from '../../Components'
 import { getMyComments } from './CommentActions'
 
 const CommentItem = ({ item, index }) => {
-	let { comment, Date } = item
+	let { comment, Date,created_at } = item
 
 	return (
 		<View>
@@ -36,7 +36,7 @@ const CommentItem = ({ item, index }) => {
 			</Row>
 		</View>
 		<View style={{ alignItems: 'flex-end' } }>
-		<Text>{moment(Date).format('YYYY-MM-DD')}</Text>
+		<Text>{moment(created_at).fromNow()}</Text>
 	  </View>
 	  </View>
 	)

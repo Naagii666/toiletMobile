@@ -5,7 +5,7 @@ export function getFacebookComments() { return { type: types.GET_FACEBOOK_COMMEN
 
 export function onAddNegotation(payload) { return { type: types.ON_ADD_NEGOTATION, payload }}
 export function onEditNegotation(payload) { return { type: types.ON_EDIT_NEGOTATION, payload }}
-export function onSendInvoice(payload) { return { type: types.ON_SEND_INVOICE, payload }}
+export function onSendInvoice(payload,data) { return { type: types.ON_SEND_INVOICE, payload ,data}}
 export function onRenew(payload) { return { type: types.ON_RENEW, payload }}
 export function onCancel(payload) { return { type: types.ON_CANCEL, payload }}
 export function onSetSelectedNegotiation(payload ) { return { type: types.ON_SET_SELECTED_NEGOTIATION, payload }}

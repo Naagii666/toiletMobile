@@ -50,7 +50,7 @@
     "react-native-i18n": "2.0.14",
     "react-native-image-picker": "^0.28.1",
     "react-native-keyboard-aware-scroll-view": "^0.8.0",
-    "react-native-maps": "^0.23.0",
+    "react-native-maps": "0.25.0",
     "react-native-material-dropdown": "^0.11.1",
     "react-native-modal-dropdown": "^0.6.2",
     "react-native-modal-selector": "^1.0.3",

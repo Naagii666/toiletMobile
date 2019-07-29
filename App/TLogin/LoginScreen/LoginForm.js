@@ -116,9 +116,10 @@ class LoginForm extends Component {
             onPress={(e) => this._onLoginFunction(e)}>
           <Text style={Loginstyles.loginText}>Нэвтрэх</Text>
         </TouchableHighlight>
+       
         <TouchableHighlight style={[Loginstyles.buttonContainer, Loginstyles.loginButton]} 
-            onPress={() => this.props.navigation.navigate('Register')}>
-            <Text style={Loginstyles.loginText}>Бүртгүүлэх</Text>
+            onPress={() => this.props.navigation.navigate('Forgot_password')}>
+            <Text style={Loginstyles.loginText}>Нууц үг сэргээх</Text>
         </TouchableHighlight>
         </View>
         

@@ -64,10 +64,10 @@ export default function NegotationReducer(state = InitialState, action) {
 			return state.setIn(['current_invoice', 'fetching'], false)
 		case types.ON_SEND_INVOICE_SUCCESS: {
 			let { id } = action.payload
-			let comment_list = state.getIn(['comment_list', 'data'])
-			comment_list = comment_list.push(fromJS(id))
+			// let comment_list = state.getIn(['comment_list', 'data'])
+			// comment_list = comment_list.push(fromJS(id))
 			return state.setIn(['current_invoice', 'fetching'], false)
-						.setIn(['comment_list', 'data'], comment_list)
+						// .setIn(['comment_list', 'data'], comment_list)
 		}
 		case types.ON_ADD_NEGOTATION:
 			return state.setIn(['comment_list', 'loading'], true)

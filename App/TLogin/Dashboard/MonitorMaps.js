@@ -12,6 +12,7 @@ import {
   Alert,
   AsyncStorage,
   FlatList,
+  RefreshControl,
   Linking
 } from 'react-native'
 import {connect} from 'react-redux'
@@ -32,7 +33,9 @@ class MonitorMaps extends Component{
   onNavigateToFacebook = (url) => {
     Linking.openURL(url).catch((err) => console.error('An error occurred', err));
   }
-
+  _onRefresh() {
+    this.props.getFacebookComments()
+  }
   _renderComment = ({ item, index }) => {
     let asSame = item.left
 
@@ -44,7 +47,7 @@ class MonitorMaps extends Component{
               <Text style={{ color: '#365899', fontWeight: 'bold', }}>{item.FromName}: </Text><Text style={{ color: colors.black }}>{item.Message}</Text>
             </View>
             <View style={[asSame == 0 ? { alignItems: 'flex-start' } : { alignItems: 'flex-end' }]}>
-              <Text>{moment(item.UpdateTime).fromNow()}</Text>
+              <Text>{moment(item.CreateTime).fromNow()}</Text>
             </View>
           </View>
         </View>
@@ -53,7 +56,7 @@ class MonitorMaps extends Component{
   }
 
   render() {
-    let { comments } = this.props
+    let { comments ,loading} = this.props
     let recomments = []
     comments.forEach((comment, i) => {
       if(i == 0) {
@@ -71,7 +74,13 @@ class MonitorMaps extends Component{
 
     return(
       <View style={{ flex: 1, }}>
-        <FlatList 
+        <FlatList
+          refreshControl={
+            <RefreshControl
+              refreshing={loading}
+              onRefresh={this._onRefresh.bind(this)}
+            />
+          } 
           inverted
           data={recomments}
           renderItem={this._renderComment}
@@ -91,11 +100,11 @@ class MonitorMaps extends Component{
               latitude: 47.919813,
               longitude: 106.929917,
             }}
-            title="Миний байгаа газар"
-            description="I am here."
+            title="1"
+            description="2"
           />
         </MapView>*/}
-        {/* <Text>Working</Text> */}
+        {/* <Text>texxt</Text> */}
       </View>
     );
   }

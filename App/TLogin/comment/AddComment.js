@@ -14,7 +14,7 @@ class AddComment extends React.Component {
   InsertComment = () => {
     // alert('Working');
     const { comment } = this.state
-    this.props.onAddComment(comment)
+    this.props.onAddComment(comment,false)
     // const {customer_id} = this.state;
     // let token='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI0LjE1OC4xMjQuNjA6ODA4MC90b2lsZXQvYXBpL3VzZXIvbG9naW4iLCJpYXQiOjE1NTYyNjM4MTEsImV4cCI6MTU1NjI2NzQxMSwibmJmIjoxNTU2MjYzODExLCJqdGkiOiJpYUJXMmNNMU9ZaHZxcmZBIiwic3ViIjoxOSwicHJ2IjoiODdlMGFmMWVmOWZkMTU4MTJmZGVjOTcxNTNhMTRlMGIwNDc1NDZhYSJ9.7_qp_Yxi5KrgKdew50vBOuO7mpczBqEtn-QdmEAve78'
     // let customer_id='1';
@@ -39,7 +39,7 @@ class AddComment extends React.Component {
 
 		return (
 			<Wrapper padding={20}>
-        <View style={styles.inputContainer}>
+        <View style={styles.inputContainer }>
           <TextInput style={styles.inputs}
             placeholder="Comment"
             onChangeText={comment => this.setState({comment})}
@@ -85,19 +85,16 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     borderBottomColor: '#F5FCFF',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFF',
     borderRadius:30,
     borderBottomWidth: 1,
-    width:250,
-    height:200,
     marginBottom:20,
     flexDirection: 'row',
-    alignItems:'center'
+    alignItems:'center',
+    flex:1
 },
 inputs:{
-    height:45,
-    marginLeft:16,
-    borderBottomColor: '#FFFFFF',
+    borderBottomColor: '#DCDCDC',
     flex:1,
 },
   definition: {

@@ -5,8 +5,9 @@ import { getAuthenticationToken } from '../../Services/storage'
 import { getCustomerId } from '../../Services/storage'
 import { NavigationActions } from 'react-navigation'
 
-function* onAddComment({ payload }) {
-	try {
+function* onAddComment({ payload,data }) {
+	if(data==false){
+		try {
 		let token = yield getAuthenticationToken()
 		let id = yield getCustomerId()
 
@@ -16,12 +17,13 @@ function* onAddComment({ payload }) {
 			return yield put({
 				type: types.ON_ADD_COMMENT_FAILED
 			})
+		}else{
+			yield put({
+				type: types.ON_ADD_COMMENT_SUCCESS,
+				payload: res.data
+			})
 		}
-
-		yield put({
-			type: types.ON_ADD_COMMENT_SUCCESS,
-			payload: res.data
-		})
+		
 		yield put(NavigationActions.back())
 	} catch(e) {
 		alert(e.message)
@@ -30,6 +32,8 @@ function* onAddComment({ payload }) {
 			type: types.ON_ADD_COMMENT_FAILED
 		})
 	}
+	}
+	
 }
 
 function* getMyComments() {
