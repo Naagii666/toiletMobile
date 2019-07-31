@@ -23,7 +23,7 @@ class DetialFaCheck extends Component{
     const otherParam = navigation.getParam('price', 'NO-ID');
     const definition = navigation.getParam('definition', 'some default value');
     const products_image = navigation.getParam('url', 'some default value');
-    const regex = /([&]nbsp[;])*(<.*?>)/ig;
+    const regex = /([&].*?[;])*(<.*?>)/ig;
     return(
       <ScrollView>
         <View style={styles.container}>
